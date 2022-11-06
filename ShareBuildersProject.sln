@@ -7,11 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareBuildersProjectWeb_Ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareBuildersProject_Models", "ShareBuildersProject_Models\ShareBuildersProject_Models.csproj", "{426CCC1C-45BD-4137-A6FC-4FB3A78FEBCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareBuildersProject_Business", "ShareBuilders_Business\ShareBuildersProject_Business.csproj", "{959770CF-B9F7-498B-9AB8-88ECC994477A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareBuildersProject_Business", "ShareBuilders_Business\ShareBuildersProject_Business.csproj", "{959770CF-B9F7-498B-9AB8-88ECC994477A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareBuildersProject_Common", "ShareBuildersProject_Common\ShareBuildersProject_Common.csproj", "{4F6BC2C2-D695-4CFE-8294-877C3AB3C0AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareBuildersProject_Common", "ShareBuildersProject_Common\ShareBuildersProject_Common.csproj", "{4F6BC2C2-D695-4CFE-8294-877C3AB3C0AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareBuildersProject_DataAccess", "ShareBuildersProject_DataAccess\ShareBuildersProject_DataAccess.csproj", "{898AE692-3A54-494E-A809-A8297605BEA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareBuildersProject_DataAccess", "ShareBuildersProject_DataAccess\ShareBuildersProject_DataAccess.csproj", "{898AE692-3A54-494E-A809-A8297605BEA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareBuildersProjectWeb_API", "ShareBuildersProjectWeb_API\ShareBuildersProjectWeb_API.csproj", "{86196ED0-6C97-4404-810A-E8C606088F81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{898AE692-3A54-494E-A809-A8297605BEA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{898AE692-3A54-494E-A809-A8297605BEA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{898AE692-3A54-494E-A809-A8297605BEA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86196ED0-6C97-4404-810A-E8C606088F81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86196ED0-6C97-4404-810A-E8C606088F81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86196ED0-6C97-4404-810A-E8C606088F81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86196ED0-6C97-4404-810A-E8C606088F81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
