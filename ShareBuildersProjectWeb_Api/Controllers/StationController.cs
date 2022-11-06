@@ -61,9 +61,7 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 		[HttpGet("GetStationById/{id}")]
 		public IActionResult GetStationById(int id)
 		{
-			var stationById = new List<Station>() { _stationRepository.GetById(id) };
-
-			var result = from station in stationById
+			var result = from station in new List<Station>() { _stationRepository.GetById(id) }
 						 select new
 						 {
 							 Id = station.Id,
