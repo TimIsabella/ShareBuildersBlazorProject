@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ShareBuildersProject_Business.Repository.Composites;
 using ShareBuildersProject_Business.Repository.IRepository;
 using ShareBuildersProject_DataAccess.Models;
 using ShareBuildersProject_Models.BlazorModels;
@@ -46,9 +45,9 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 
 			if(result.Id != null)
 			{
-				_stationCompositeRepository.CreateAffiliate((int)result.Id, stationData.AffiliateIds);			//Affiliate
-				_stationCompositeRepository.CreateBroadcastType((int)result.Id, stationData.BroadcastTypeIds);	//BroadcastType
-				_stationCompositeRepository.CreateMarket((int)result.Id, stationData.MarketIds);				//Market
+				_stationCompositeRepository.CreateAffiliate((int)result.Id, stationData.AffiliateIds);
+				_stationCompositeRepository.CreateBroadcastType((int)result.Id, stationData.BroadcastTypeIds);
+				_stationCompositeRepository.CreateMarket((int)result.Id, stationData.MarketIds);
 			}
 
 			return StatusCode(201, result);
@@ -57,7 +56,51 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 		[HttpGet("GetStationById/{id}")]
 		public IActionResult GetStationById(int id)
 		{
-			var result = _stationRepository.GetById(id);
+			var stationById = new List<Station>() { _stationRepository.GetById(id) };
+
+			var result = from station in stationById
+						 select new
+						 {
+							 Id = station.Id,
+							 CallLetters = station.CallLetters,
+							 Owner = station.Owner,
+							 Format = station.Format,
+
+							 AffiliatesAssigned = (from affiliate in _affiliateRepository.GetAll()
+												   join affiliateComp in _stationCompositeRepository.GetAllAffiliates()
+												   on affiliate.Id equals affiliateComp.AffiliateId
+												   where affiliateComp.StationId == station.Id
+												   select new
+												   {
+													   Id = affiliate.Id,
+													   Name = affiliate.Name,
+													   ShortName = affiliate.ShortName,
+													   City = affiliate.City,
+													   State = affiliate.State
+												   }).ToList(),
+
+							 BroadcastTypesAssigned = (from broadcastType in _broadcastTypeRepository.GetAll()
+													   join broadcastTypeComp in _stationCompositeRepository.GetAllBroadcastTypes()
+													   on broadcastType.Id equals broadcastTypeComp.BroadcastTypeId
+													   where station.Id == broadcastTypeComp.StationId
+													   select new
+													   {
+														   Id = broadcastType.Id,
+														   Name = broadcastType.Name
+													   }).ToList(),
+
+							 MarketsAssigned = (from market in _marketRepository.GetAll()
+												join marketComp in _stationCompositeRepository.GetAllMarkets()
+												on market.Id equals marketComp.MarketId
+												where station.Id == marketComp.StationId
+												select new
+												{
+													Id = market.Id,
+													Name = market.Name,
+													State = market.State
+												}).ToList(),
+						 };
+
 			return StatusCode(200, result);
 		}
 
@@ -72,33 +115,33 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 							 Owner = station.Owner,
 							 Format = station.Format,
 
-							 AffiliatesAssigned = (from affiliateComp in _stationCompositeRepository.GetAllAffiliates()
+							 AffiliatesAssigned = (from affiliate in _affiliateRepository.GetAll()
+												   join affiliateComp in _stationCompositeRepository.GetAllAffiliates()
+												   on affiliate.Id equals affiliateComp.AffiliateId
 												   where affiliateComp.StationId == station.Id
-												   from affiliate in _affiliateRepository.GetAll()
-												   where affiliate.Id == affiliateComp.AffiliateId
 												   select new
-												   { 
-														Id = affiliate.Id,
-														Name = affiliate.Name,
-														ShortName = affiliate.ShortName,
-														City = affiliate.City,
-														State = affiliate.State
+												   {
+													   Id = affiliate.Id,
+													   Name = affiliate.Name,
+													   ShortName = affiliate.ShortName,
+													   City = affiliate.City,
+													   State = affiliate.State
 												   }).ToList(),
 
-							 BroadcastTypesAssigned = (from broadcastTypeComp in _stationCompositeRepository.GetAllBroadcastTypes()
+							 BroadcastTypesAssigned = (from broadcastType in _broadcastTypeRepository.GetAll()
+													   join broadcastTypeComp in _stationCompositeRepository.GetAllBroadcastTypes()
+													   on broadcastType.Id equals broadcastTypeComp.BroadcastTypeId
 													   where station.Id == broadcastTypeComp.StationId
-													   from broadcastType in _broadcastTypeRepository.GetAll()
-													   where broadcastType.Id == broadcastTypeComp.BroadcastTypeId
 													   select new
 													   {
 														   Id = broadcastType.Id,
 														   Name = broadcastType.Name
 													   }).ToList(),
 
-							 MarketsAssigned = (from marketComp in _stationCompositeRepository.GetAllMarkets()
+							 MarketsAssigned = (from market in _marketRepository.GetAll()
+												join marketComp in _stationCompositeRepository.GetAllMarkets()
+												on market.Id equals marketComp.MarketId
 												where station.Id == marketComp.StationId
-												from market in _marketRepository.GetAll()
-												where market.Id == marketComp.MarketId
 												select new
 												{
 													Id = market.Id,
