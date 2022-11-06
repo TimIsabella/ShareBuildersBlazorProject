@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ShareBuildersProject_Business.Repository.Composites;
 using ShareBuildersProject_Business.Repository.IRepository;
 using ShareBuildersProject_DataAccess.Models;
 using ShareBuildersProject_Models.BlazorModels;
@@ -72,9 +73,9 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 							 Format = station.Format,
 
 							 AffiliatesAssigned = (from affiliateComp in _stationCompositeRepository.GetAllAffiliates()
-												   where station.Id == affiliateComp.StationId
+												   where affiliateComp.StationId == station.Id
 												   from affiliate in _affiliateRepository.GetAll()
-												   where affiliate.Id ==affiliateComp.StationId
+												   where affiliate.Id == affiliateComp.AffiliateId
 												   select new
 												   { 
 														Id = affiliate.Id,
@@ -84,9 +85,26 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 														State = affiliate.State
 												   }).ToList(),
 
-							 //BroadcastTypesAssigned = ().ToList(),
+							 BroadcastTypesAssigned = (from broadcastTypeComp in _stationCompositeRepository.GetAllBroadcastTypes()
+													   where station.Id == broadcastTypeComp.StationId
+													   from broadcastType in _broadcastTypeRepository.GetAll()
+													   where broadcastType.Id == broadcastTypeComp.BroadcastTypeId
+													   select new
+													   {
+														   Id = broadcastType.Id,
+														   Name = broadcastType.Name
+													   }).ToList(),
 
-							 //MarketsAssigned = ().ToList(),
+							 MarketsAssigned = (from marketComp in _stationCompositeRepository.GetAllMarkets()
+												where station.Id == marketComp.StationId
+												from market in _marketRepository.GetAll()
+												where market.Id == marketComp.MarketId
+												select new
+												{
+													Id = market.Id,
+													Name = market.Name,
+													State = market.State
+												}).ToList(),
 						 };
 
 			return StatusCode(200, result);

@@ -111,7 +111,7 @@ namespace ShareBuildersProject_Business.Repository.Composites
 			return list;
 		}
 
-		public List<MarketComposite> GetAllMarket()
+		public List<MarketComposite> GetAllMarkets()
 		{
 			var list = _dbContext.MarketComposites.ToList();
 			return list;

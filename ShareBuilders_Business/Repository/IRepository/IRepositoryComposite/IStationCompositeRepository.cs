@@ -17,7 +17,7 @@ namespace ShareBuildersProject_Business.Repository.IRepository
 
 		//Market
 		public List<MarketComposite> CreateMarket(int stationId, int[] MarketId);
-		public List<MarketComposite> GetAllMarket();
+		public List<MarketComposite> GetAllMarkets();
 		public int DeleteMarket(int stationId);
 	}
 }

@@ -62,8 +62,8 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 							 LastName = user.LastName,
 							 StationsAssigned = (from userComp in _userCompositeRepository.GetAll()
 												 where user.Id == userComp.UserId
-												 from station in _stationRepository.GetAll()
-												 where station.Id == userComp.StationId
+												 join station in _stationRepository.GetAll()
+												 on userComp.StationId equals station.Id
 												 select new
 												 {
 													 Id = station.Id,
