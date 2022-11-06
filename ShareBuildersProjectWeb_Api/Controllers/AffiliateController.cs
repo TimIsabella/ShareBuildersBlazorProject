@@ -41,7 +41,7 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 			return StatusCode(200, result);
 		}
 
-		[HttpDelete("DeleteAffiliate")]
+		[HttpDelete("DeleteAffiliate/{id}")]
 		public IActionResult Delete(int id)
 		{
 			var result = _affiliateRepository.Delete(id);

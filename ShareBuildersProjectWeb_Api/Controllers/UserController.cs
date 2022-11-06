@@ -37,11 +37,17 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 			return StatusCode(201, result);
 		}
 
+		[HttpGet("GetUserById/{id}")]
+		public IActionResult GetUserById(int id)
+		{
+			var result = _userRepository.GetById(id);
+			return StatusCode(200, result);
+		}
+
 		[HttpGet("GetAllUsers")]
 		public IActionResult GetAllUsers()
 		{
 			var result = _userRepository.GetAll();
-
 			return StatusCode(200, result);
 		}
 
@@ -75,14 +81,14 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 		[HttpPut("UpdateUser")]
 		public IActionResult Update([FromForm] UserDTO userData)
 		{
-			User newUser = new User()
+			User updatedUser = new User()
 			{
 				Id = userData.Id,
 				FirstName = userData.FirstName,
 				LastName = userData.LastName,
 			};
 
-			var result = _userRepository.Update(newUser);
+			var result = _userRepository.Update(updatedUser);
 
 			_userCompositeRepository.Delete((int)userData.Id);
 			_userCompositeRepository.Create((int)userData.Id, userData.StationIds);
@@ -90,7 +96,7 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 			return StatusCode(200, result);
 		}
 
-		[HttpDelete("DeleteUser")]
+		[HttpDelete("DeleteUser/{id}")]
 		public IActionResult Delete(int id)
 		{
 			var result = _userRepository.Delete(id);

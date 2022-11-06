@@ -41,7 +41,7 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 			return StatusCode(200, result);
 		}
 
-		[HttpDelete("DeleteMarket")]
+		[HttpDelete("DeleteMarket/{id}")]
 		public IActionResult Delete(int id)
 		{
 			var result = _marketRepository.Delete(id);

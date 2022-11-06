@@ -41,7 +41,7 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 			return StatusCode(200, result);
 		}
 
-		[HttpDelete("DeleteBroadcastType")]
+		[HttpDelete("DeleteBroadcastType/{id}")]
 		public IActionResult Delete(int id)
 		{
 			var result = _broadcastTypeRepository.Delete(id);
