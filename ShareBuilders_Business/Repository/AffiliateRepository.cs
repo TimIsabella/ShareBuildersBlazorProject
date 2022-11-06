@@ -50,19 +50,15 @@ namespace ShareBuildersProject_Business.Repository
 
 			if(affiliate != null)
 			{
-				Affiliate updatedAffiliate = new Affiliate()
-				{
-					Id = affiliate.Id,
-					Name = obj.Name,
-					ShortName = obj.ShortName,
-					City = obj.City,
-					State = obj.State
-				};
+				affiliate.Name = obj.Name;
+				affiliate.ShortName = obj.ShortName;
+				affiliate.City = obj.City;
+				affiliate.State = obj.State;
 
-				_dbContext.Affiliates.Update(updatedAffiliate);
+				_dbContext.Affiliates.Update(affiliate);
 				_dbContext.SaveChanges();
 
-				return updatedAffiliate;
+				return affiliate;
 			}
 			else return obj;
 		}

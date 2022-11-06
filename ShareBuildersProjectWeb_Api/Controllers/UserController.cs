@@ -5,6 +5,8 @@ using ShareBuildersProject_Models.BlazorModels;
 
 namespace ShareBuildersProjectWeb_Api.Controllers
 {
+	[Route("api/Users")]
+	[ApiController]
 	public class UserController : ControllerBase
 	{
 		private readonly IUserRepository _userRepository;

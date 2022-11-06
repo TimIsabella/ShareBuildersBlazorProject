@@ -49,18 +49,14 @@ namespace ShareBuildersProject_Business.Repository
 
 			if(station != null)
 			{
-				Station updatedStation = new Station()
-				{
-					Id = station.Id,
-					CallLetters = obj.CallLetters,
-					Owner = obj.Owner,
-					Format = obj.Format
-				};
+				station.CallLetters = obj.CallLetters;
+				station.Owner = obj.Owner;
+				station.Format = obj.Format;
 
-				_dbContext.Stations.Update(updatedStation);
+				_dbContext.Stations.Update(station);
 				_dbContext.SaveChanges();
 
-				return updatedStation;
+				return station;
 			}
 			else return obj;
 		}

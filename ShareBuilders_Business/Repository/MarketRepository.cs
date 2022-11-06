@@ -45,21 +45,17 @@ namespace ShareBuildersProject_Business.Repository
 
 		public Market Update(Market obj)
 		{
-			var market = _dbContext.Users.Find(obj.Id);
+			var market = _dbContext.Markets.Find(obj.Id);
 
 			if(market != null)
 			{
-				Market updatedMarket = new Market()
-				{
-					Id = market.Id,
-					Name = obj.Name,
-					State = obj.State
-				};
+				market.Name = obj.Name;
+				market.State = obj.State;
 
-				_dbContext.Markets.Update(updatedMarket);
+				_dbContext.Markets.Update(market);
 				_dbContext.SaveChanges();
 
-				return updatedMarket;
+				return market;
 			}
 			else return obj;
 		}

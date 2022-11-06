@@ -47,16 +47,12 @@ namespace ShareBuildersProject_Business.Repository
 
 			if(broadcastType != null)
 			{
-				BroadcastType updatedBroadcastType = new BroadcastType()
-				{
-					Id = broadcastType.Id,
-					Name = obj.Name
-				};
+				broadcastType.Name = obj.Name;
 
-				_dbContext.BroadcastTypes.Update(updatedBroadcastType);
+				_dbContext.BroadcastTypes.Update(broadcastType);
 				_dbContext.SaveChanges();
 
-				return updatedBroadcastType;
+				return broadcastType;
 			}
 			else return obj;
 		}

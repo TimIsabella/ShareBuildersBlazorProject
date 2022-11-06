@@ -57,7 +57,7 @@ namespace ShareBuildersProject_Business.Repository
 
 				return user;
 			}
-			else return user;
+			else return obj;
 		}
 
 		public int Delete(int id)
