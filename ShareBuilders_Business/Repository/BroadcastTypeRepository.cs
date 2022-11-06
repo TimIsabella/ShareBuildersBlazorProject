@@ -32,7 +32,7 @@ namespace ShareBuildersProject_Business.Repository
 
 		public BroadcastType GetById(int id)
 		{
-			var broadcastType = _dbContext.BroadcastTypes.First(element => element.Id == id);
+			var broadcastType = _dbContext.BroadcastTypes.Find(id);
 
 			if(broadcastType != null)
 			{
@@ -43,7 +43,7 @@ namespace ShareBuildersProject_Business.Repository
 
 		public BroadcastType Update(BroadcastType obj)
 		{
-			var broadcastType = _dbContext.BroadcastTypes.First(element => element.Id == obj.Id);
+			var broadcastType = _dbContext.BroadcastTypes.Find(obj.Id);
 
 			if(broadcastType != null)
 			{
@@ -63,7 +63,7 @@ namespace ShareBuildersProject_Business.Repository
 
 		public int Delete(int id)
 		{
-			var broadcastType = _dbContext.BroadcastTypes.First(element => element.Id == id);
+			var broadcastType = _dbContext.BroadcastTypes.Find(id);
 
 			if(broadcastType != null)
 			{

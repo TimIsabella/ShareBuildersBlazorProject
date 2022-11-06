@@ -34,7 +34,7 @@ namespace ShareBuildersProject_Business.Repository
 
 		public User GetById(int id)
 		{
-			var user = _dbContext.Users.First(element => element.Id == id);
+			var user = _dbContext.Users.Find(id);
 
 			if(user != null)
 			{
@@ -45,29 +45,24 @@ namespace ShareBuildersProject_Business.Repository
 
 		public User Update(User obj)
 		{
-			var user = _dbContext.Users.First(element => element.Id == obj.Id);
+			var user = _dbContext.Users.Find(obj.Id);
 
 			if(user != null)
 			{
-				User updatedUser = new User()
-				{
-					Id = user.Id,
-					FirstName = obj.FirstName,
-					LastName = obj.LastName,
-					CreationDate = user.CreationDate
-				};
+				user.FirstName = obj.FirstName;
+				user.LastName = obj.LastName;
 
-				_dbContext.Users.Update(updatedUser);
+				_dbContext.Users.Update(user);
 				_dbContext.SaveChanges();
 
-				return updatedUser;
+				return user;
 			}
 			else return user;
 		}
 
 		public int Delete(int id)
 		{
-			var user = _dbContext.Users.First(element => element.Id == id);
+			var user = _dbContext.Users.Find(id);
 
 			if(user != null)
 			{

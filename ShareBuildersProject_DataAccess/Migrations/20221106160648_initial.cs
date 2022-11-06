@@ -227,9 +227,9 @@ namespace ShareBuildersProject_DataAccess.Migrations
                 columns: new[] { "Id", "CreationDate", "FirstName", "LastName" },
                 values: new object[,]
                 {
-                    { 1, null, "Mike", "Jones" },
-                    { 2, null, "Bob", "Smith" },
-                    { 3, null, "Sarah", "Parker" }
+                    { 1, new DateTime(2022, 11, 6, 8, 6, 48, 104, DateTimeKind.Local).AddTicks(1969), "Mike", "Jones" },
+                    { 2, new DateTime(2022, 11, 6, 8, 6, 48, 106, DateTimeKind.Local).AddTicks(7984), "Bob", "Smith" },
+                    { 3, new DateTime(2022, 11, 6, 8, 6, 48, 106, DateTimeKind.Local).AddTicks(8008), "Sarah", "Parker" }
                 });
         }
 

@@ -35,7 +35,7 @@ namespace ShareBuildersProject_Business.Repository
 
 		public Affiliate GetById(int id)
 		{
-			var affiliate = _dbContext.Affiliates.First(element => element.Id == id);
+			var affiliate = _dbContext.Affiliates.Find(id);
 
 			if(affiliate != null)
 			{
@@ -46,7 +46,7 @@ namespace ShareBuildersProject_Business.Repository
 
 		public Affiliate Update(Affiliate obj)
 		{
-			var affiliate = _dbContext.Affiliates.First(element => element.Id == obj.Id);
+			var affiliate = _dbContext.Affiliates.Find(obj.Id);
 
 			if(affiliate != null)
 			{
@@ -69,7 +69,7 @@ namespace ShareBuildersProject_Business.Repository
 
 		public int Delete(int id)
 		{
-			var affiliate = _dbContext.Affiliates.First(element => element.Id == id);
+			var affiliate = _dbContext.Affiliates.Find(id);
 
 			if(affiliate != null)
 			{

@@ -12,13 +12,13 @@ namespace ShareBuildersProject_Business.Repository.Composites
 		public UserCompositeRepository(ApplicationDbContext dbContext)
 		{ _dbContext = dbContext; }
 
-		public List<UserComposite> CreateUser(int userId, int[] stationIds)
+		public List<UserComposite> Create(int userId, int[] stationIds)
 		{
-			var compositeList = new List<UserComposite>();
+			var list = new List<UserComposite>();
 
 			foreach(int station in stationIds)
-			{ 
-				compositeList.Add(
+			{
+				list.Add(
 					new UserComposite()
 					{
 						UserId = userId,
@@ -26,25 +26,25 @@ namespace ShareBuildersProject_Business.Repository.Composites
 					});
 			}
 
-			_dbContext.UserComposites.AddRange(compositeList);
+			_dbContext.UserComposites.AddRange(list);
 			_dbContext.SaveChanges();
 
-			return compositeList;
+			return list;
 		}
 
-		public List<UserComposite> GetAllUsers()
+		public List<UserComposite> GetAll()
 		{
-			var userList = _dbContext.UserComposites.ToList();
-			return userList;
+			var list = _dbContext.UserComposites.ToList();
+			return list;
 		}
 
-		public int DeleteUser(int id)
+		public int Delete(int id)
 		{
-			var user = _dbContext.UserComposites.Where(element => element.UserId == id).ToList();
+			var list = _dbContext.UserComposites.Where(element => element.UserId == id).ToList();
 
-			if(user != null)
+			if(list != null)
 			{
-				_dbContext.UserComposites.RemoveRange(user);
+				_dbContext.UserComposites.RemoveRange(list);
 				return _dbContext.SaveChanges();
 			}
 			else return 0;

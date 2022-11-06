@@ -12,7 +12,7 @@ namespace ShareBuildersProject_Models.BlazorModels
 
 		[Required]
 		[Range(1, 50)]
-		public bool LastName { get; set; }
+		public string LastName { get; set; }
 
 		public int[]? StationIds { get; set; }
 	}

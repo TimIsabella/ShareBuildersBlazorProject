@@ -34,7 +34,7 @@ namespace ShareBuildersProject_Business.Repository
 
 		public Market GetById(int id)
 		{
-			var market = _dbContext.Markets.First(element => element.Id == id);
+			var market = _dbContext.Markets.Find(id);
 
 			if(market != null)
 			{
@@ -45,7 +45,7 @@ namespace ShareBuildersProject_Business.Repository
 
 		public Market Update(Market obj)
 		{
-			var market = _dbContext.Users.First(element => element.Id == obj.Id);
+			var market = _dbContext.Users.Find(obj.Id);
 
 			if(market != null)
 			{
@@ -66,7 +66,7 @@ namespace ShareBuildersProject_Business.Repository
 
 		public int Delete(int id)
 		{
-			var market = _dbContext.Markets.First(element => element.Id == id);
+			var market = _dbContext.Markets.Find(id);
 
 			if(market != null)
 			{

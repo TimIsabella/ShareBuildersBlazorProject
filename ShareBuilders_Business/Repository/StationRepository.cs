@@ -34,7 +34,7 @@ namespace ShareBuildersProject_Business.Repository
 
 		public Station GetById(int id)
 		{
-			var station = _dbContext.Stations.First(element => element.Id == id);
+			var station = _dbContext.Stations.Find(id);
 
 			if(station != null)
 			{
@@ -45,7 +45,7 @@ namespace ShareBuildersProject_Business.Repository
 
 		public Station Update(Station obj)
 		{
-			var station = _dbContext.Stations.First(element => element.Id == obj.Id);
+			var station = _dbContext.Stations.Find(obj.Id);
 
 			if(station != null)
 			{
@@ -67,7 +67,7 @@ namespace ShareBuildersProject_Business.Repository
 
 		public int Delete(int id)
 		{
-			var station = _dbContext.Stations.First(element => element.Id == id);
+			var station = _dbContext.Stations.Find(id);
 
 			if(station != null)
 			{
