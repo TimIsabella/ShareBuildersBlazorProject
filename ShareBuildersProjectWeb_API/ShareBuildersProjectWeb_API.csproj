@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ShareBuildersProject_DataAccess\ShareBuildersProject_DataAccess.csproj" />
-    <ProjectReference Include="..\ShareBuilders_Business\ShareBuildersProject_Business.csproj" />
   </ItemGroup>
 
 </Project>
