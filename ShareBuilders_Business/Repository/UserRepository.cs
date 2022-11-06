@@ -9,9 +9,7 @@ namespace ShareBuildersProject_Business.Repository
 		private readonly ApplicationDbContext _dbContext;
 
 		public UserRepository(ApplicationDbContext dbContext)
-		{
-			_dbContext = dbContext;
-		}
+		{ _dbContext = dbContext; }
 
 		public User Create(User obj)
 		{
@@ -31,7 +29,6 @@ namespace ShareBuildersProject_Business.Repository
 		public List<User> GetAll()
 		{
 			var userList = _dbContext.Users.ToList();
-
 			return userList;
 		}
 

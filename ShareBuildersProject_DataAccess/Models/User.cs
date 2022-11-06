@@ -15,6 +15,6 @@ namespace ShareBuildersProject_DataAccess.Models
         [Range(1, 50)]
         public string LastName { get; set; }
 
-        public DateTime CreationDate { get; set; }
+        public DateTime? CreationDate { get; set; }
     }
 }

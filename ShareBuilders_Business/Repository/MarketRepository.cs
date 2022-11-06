@@ -10,9 +10,7 @@ namespace ShareBuildersProject_Business.Repository
 		private readonly ApplicationDbContext _dbContext;
 
 		public MarketRepository(ApplicationDbContext dbContext)
-		{
-			_dbContext = dbContext;
-		}
+		{ _dbContext = dbContext; }
 
 		public Market Create(Market obj)
 		{
@@ -31,7 +29,6 @@ namespace ShareBuildersProject_Business.Repository
 		public List<Market> GetAll()
 		{
 			var marketList = _dbContext.Markets.ToList();
-
 			return marketList;
 		}
 

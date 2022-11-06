@@ -9,9 +9,7 @@ namespace ShareBuildersProject_Business.Repository
 		private readonly ApplicationDbContext _dbContext;
 
 		public BroadcastTypeRepository(ApplicationDbContext dbContext)
-		{
-			_dbContext = dbContext;
-		}
+		{ _dbContext = dbContext; }
 
 		public BroadcastType Create(BroadcastType obj)
 		{
@@ -29,7 +27,6 @@ namespace ShareBuildersProject_Business.Repository
 		public List<BroadcastType> GetAll()
 		{
 			var broadcastTypeList = _dbContext.BroadcastTypes.ToList();
-
 			return broadcastTypeList;
 		}
 

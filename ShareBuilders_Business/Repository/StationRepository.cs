@@ -9,9 +9,7 @@ namespace ShareBuildersProject_Business.Repository
 		private readonly ApplicationDbContext _dbContext;
 
 		public StationRepository(ApplicationDbContext dbContext)
-		{
-			_dbContext = dbContext;
-		}
+		{ _dbContext = dbContext; }
 
 		public Station Create(Station obj)
 		{
@@ -31,7 +29,6 @@ namespace ShareBuildersProject_Business.Repository
 		public List<Station> GetAll()
 		{
 			var stationList = _dbContext.Stations.ToList();
-
 			return stationList;
 		}
 

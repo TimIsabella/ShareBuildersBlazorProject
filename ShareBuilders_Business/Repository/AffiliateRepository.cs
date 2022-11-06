@@ -9,9 +9,7 @@ namespace ShareBuildersProject_Business.Repository
 		private readonly ApplicationDbContext _dbContext;
 
 		public AffiliateRepository(ApplicationDbContext dbContext)
-		{
-			_dbContext = dbContext;
-		}
+		{ _dbContext = dbContext; }
 
 		public Affiliate Create(Affiliate obj)
 		{
@@ -32,7 +30,6 @@ namespace ShareBuildersProject_Business.Repository
 		public List<Affiliate> GetAll()
 		{
 			var affiliateList = _dbContext.Affiliates.ToList();
-
 			return affiliateList;
 		}
 

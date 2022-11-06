@@ -2,19 +2,28 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using ShareBuildersProject_Business.Repository;
+using ShareBuildersProject_Business.Repository.Composites;
 using ShareBuildersProject_Business.Repository.IRepository;
 using ShareBuildersProject_DataAccess.Data;
 using ShareBuildersProjectWeb_Server.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
 //Dependancy injection
 builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddScoped<ICategoryRepository, UserRepository>();
+
+builder.Services.AddScoped<IAffiliateRepository, AffiliateRepository>();
+builder.Services.AddScoped<IBroadcastTypeRepository, BroadcastTypeRepository>();
+builder.Services.AddScoped<IMarketRepository, MarketRepository>();
+builder.Services.AddScoped<IStationRepository, StationRepository>();
+builder.Services.AddScoped<IStationCompositeRepository, StationCompositeRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserCompositeRepository, UserCompositeRepository>();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));	//Add DbContext and configure SQL with connection string from 'appsettings.json'
 
 var app = builder.Build();
