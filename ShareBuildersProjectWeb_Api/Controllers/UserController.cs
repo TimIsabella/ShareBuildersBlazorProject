@@ -92,7 +92,7 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 
 			_userCompositeRepository.Delete((int)userData.Id);
 
-			if(userData.StationIds != null)
+			if(result.CreationDate != null && userData.StationIds != null)
 			{ _userCompositeRepository.Create((int)result.Id, userData.StationIds); }
 
 			return StatusCode(200, result);
