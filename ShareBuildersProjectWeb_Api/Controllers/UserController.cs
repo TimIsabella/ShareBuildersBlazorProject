@@ -90,10 +90,11 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 
 			var result = _userRepository.Update(updatedUser);
 
-			_userCompositeRepository.Delete((int)userData.Id);
-
 			if(result.CreationDate != null && userData.StationIds != null)
-			{ _userCompositeRepository.Create((int)result.Id, userData.StationIds); }
+			{
+				_userCompositeRepository.Delete((int)userData.Id);
+				_userCompositeRepository.Create((int)result.Id, userData.StationIds); 
+			}
 
 			return StatusCode(200, result);
 		}

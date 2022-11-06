@@ -169,18 +169,23 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 
 			var result = _stationRepository.Update(updatedStation);
 
-			_stationCompositeRepository.DeleteAffiliate((int)stationData.Id);
-			_stationCompositeRepository.DeleteBroadcastType((int)stationData.Id);
-			_stationCompositeRepository.DeleteMarket((int)stationData.Id);
-
 			if(stationData.AffiliateIds != null)
-			{ _stationCompositeRepository.CreateAffiliate((int)result.Id, stationData.AffiliateIds); }
+			{
+				_stationCompositeRepository.DeleteAffiliate((int)stationData.Id);
+				_stationCompositeRepository.CreateAffiliate((int)result.Id, stationData.AffiliateIds); 
+			}
 
 			if(stationData.BroadcastTypeIds != null)
-			{ _stationCompositeRepository.CreateBroadcastType((int)result.Id, stationData.BroadcastTypeIds); }
+			{
+				_stationCompositeRepository.DeleteBroadcastType((int)stationData.Id);
+				_stationCompositeRepository.CreateBroadcastType((int)result.Id, stationData.BroadcastTypeIds);
+			}
 
 			if(stationData.MarketIds != null)
-			{ _stationCompositeRepository.CreateMarket((int)result.Id, stationData.MarketIds); }
+			{
+				_stationCompositeRepository.DeleteMarket((int)stationData.Id);
+				_stationCompositeRepository.CreateMarket((int)result.Id, stationData.MarketIds);
+			}
 
 			return StatusCode(200, result);
 		}
