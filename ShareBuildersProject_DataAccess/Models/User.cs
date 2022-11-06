@@ -5,7 +5,7 @@ namespace ShareBuildersProject_DataAccess.Models
     public class User
     {
         [Key]
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         [Required]
         [Range(1, 50)]
@@ -15,6 +15,6 @@ namespace ShareBuildersProject_DataAccess.Models
         [Range(1, 50)]
         public string LastName { get; set; }
 
-        public DateTime CreationDate { get; set; } = DateTime.UtcNow;
+        public DateTime CreationDate { get; set; }
     }
 }

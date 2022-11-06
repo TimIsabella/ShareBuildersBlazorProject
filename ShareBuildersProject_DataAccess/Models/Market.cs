@@ -5,7 +5,7 @@ namespace ShareBuildersProject_DataAccess.Models
     public class Market
     {
         [Key]
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         [Required]
         [Range(1, 50)]

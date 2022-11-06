@@ -20,7 +20,6 @@ namespace ShareBuildersProject_DataAccess.ModelData.CompositeData
 				BroadcastTypeId = 3
 			},
 
-
 			//Station 2
 			new BroadcastTypeComposite
 			{

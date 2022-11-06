@@ -14,7 +14,7 @@ builder.Services.AddServerSideBlazor();
 
 //Dependancy injection
 builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryRepository, UserRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));	//Add DbContext and configure SQL with connection string from 'appsettings.json'
 
 var app = builder.Build();
