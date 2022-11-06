@@ -45,9 +45,14 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 
 			if(result.Id != null)
 			{
-				_stationCompositeRepository.CreateAffiliate((int)result.Id, stationData.AffiliateIds);
-				_stationCompositeRepository.CreateBroadcastType((int)result.Id, stationData.BroadcastTypeIds);
-				_stationCompositeRepository.CreateMarket((int)result.Id, stationData.MarketIds);
+				if(stationData.AffiliateIds != null)
+				{ _stationCompositeRepository.CreateAffiliate((int)result.Id, stationData.AffiliateIds); }
+				
+				if(stationData.BroadcastTypeIds != null)
+				{ _stationCompositeRepository.CreateBroadcastType((int)result.Id, stationData.BroadcastTypeIds); }
+				
+				if(stationData.MarketIds != null)
+				{ _stationCompositeRepository.CreateMarket((int)result.Id, stationData.MarketIds); }
 			}
 
 			return StatusCode(201, result);
@@ -158,6 +163,7 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 		{
 			Station updatedStation = new Station()
 			{
+				Id = stationData.Id,
 				CallLetters = stationData.CallLetters,
 				Owner = stationData.Owner,
 				Format = stationData.Format,
@@ -169,9 +175,14 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 			_stationCompositeRepository.DeleteBroadcastType((int)stationData.Id);
 			_stationCompositeRepository.DeleteMarket((int)stationData.Id);
 
-			_stationCompositeRepository.CreateAffiliate((int)stationData.Id, stationData.AffiliateIds);
-			_stationCompositeRepository.CreateBroadcastType((int)stationData.Id, stationData.BroadcastTypeIds);
-			_stationCompositeRepository.CreateMarket((int)stationData.Id, stationData.MarketIds);
+			if(stationData.AffiliateIds != null)
+			{ _stationCompositeRepository.CreateAffiliate((int)result.Id, stationData.AffiliateIds); }
+
+			if(stationData.BroadcastTypeIds != null)
+			{ _stationCompositeRepository.CreateBroadcastType((int)result.Id, stationData.BroadcastTypeIds); }
+
+			if(stationData.MarketIds != null)
+			{ _stationCompositeRepository.CreateMarket((int)result.Id, stationData.MarketIds); }
 
 			return StatusCode(200, result);
 		}

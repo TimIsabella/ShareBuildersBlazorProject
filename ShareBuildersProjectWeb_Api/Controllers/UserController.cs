@@ -31,7 +31,7 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 
 			var result = _userRepository.Create(newUser);
 
-			if(result.Id != null)
+			if(result.Id != null && userData.StationIds != null)
 			{ _userCompositeRepository.Create((int)result.Id, userData.StationIds); }
 
 			return StatusCode(201, result);
@@ -91,7 +91,9 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 			var result = _userRepository.Update(updatedUser);
 
 			_userCompositeRepository.Delete((int)userData.Id);
-			_userCompositeRepository.Create((int)userData.Id, userData.StationIds);
+
+			if(userData.StationIds != null)
+			{ _userCompositeRepository.Create((int)result.Id, userData.StationIds); }
 
 			return StatusCode(200, result);
 		}
