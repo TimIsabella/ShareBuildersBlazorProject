@@ -1,0 +1,56 @@
+﻿@page "/OtherStuff/BindProp"
+
+<div class="row border p-3">
+	<h3 class="text-primary">Product Summary</h3><hr />
+
+
+	Id: @Product.Id<br />
+	Name: @Product.Name<br />
+	Inventory: @(Product.IsActive ? "Available" : "Unavailable")<br />
+	Price: @Product.Price<br />
+
+	Selected Property: @selectedProp<br />
+		@if (!String.IsNullOrWhiteSpace(selectedProp))
+		{
+			<p>Property Value: @Product.ProductProperties.FirstOrDefault(prop => prop.Key == selectedProp).Value </p>
+		}
+
+</div>
+
+<br /><br />
+
+Price Input: <input type="number" @bind="@Product.Price" @bind:event="oninput"/><br />
+Inventory Status: <input type="checkbox" @bind-value="@Product.IsActive" checked="@(Product.IsActive ? "checked" : null)"/><br />
+
+Product Properties: 
+<select @bind="selectedProp">
+	@foreach(var prop in Product.ProductProperties)
+	{
+		<option value="@prop.Key">@prop.Key</option>
+	}
+</select>
+
+@*Price Input (one way): <input type="number" value="@Product.Price" /><br />	*@																@*//One way binding: does not update property*@
+@*Price Input (two way on lose focus): <input type="number" @bind-value="@Product.Price" /><br />	*@											@*//Two way binding: updates property on lose focus*@
+@*Price Input (two way on lose focus and input event): <input type="number" @bind-value="@Product.Price" @bind-value:event="oninput"/><br />*@	@*//Two way binding: updates property on elose focus and input event*@
+@*Price Input (two way on input event): <input type="number" @bind="@Product.Price" @bind:event="oninput"/><br />	*@							@*//Two way binding: updates property on input event*@
+
+
+
+@code {
+	private string selectedProp = "";
+
+	Product Product = new()
+		{
+			Id = 1,
+			Name = "Delicious Drink",
+			IsActive = true,
+			Price = 11.11,
+			ProductProperties = new List<ProductProp>()
+			{ 
+				new ProductProp { Id = 1, Key = "Color", Value = "Red" },
+				new ProductProp { Id = 2, Key = "Flavor", Value = "Cherry" },
+				new ProductProp { Id = 3, Key = "Size", Value = "20oz" }
+			}
+		};
+}

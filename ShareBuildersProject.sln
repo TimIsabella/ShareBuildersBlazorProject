@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareBuildersProjectWeb_Server", "ShareBuildersProjectWeb_Server\ShareBuildersProjectWeb_Server.csproj", "{1AB489BF-A14B-45F5-BA13-EB5A41B388BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareBuildersProjectWeb_Server", "ShareBuildersProjectWeb_Server\ShareBuildersProjectWeb_Server.csproj", "{1AB489BF-A14B-45F5-BA13-EB5A41B388BF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareBuildersProject_Models", "ShareBuildersProject_Models\ShareBuildersProject_Models.csproj", "{426CCC1C-45BD-4137-A6FC-4FB3A78FEBCA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareBuildersProject_Business", "ShareBuilders_Business\ShareBuildersProject_Business.csproj", "{959770CF-B9F7-498B-9AB8-88ECC994477A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareBuildersProject_Common", "ShareBuildersProject_Common\ShareBuildersProject_Common.csproj", "{4F6BC2C2-D695-4CFE-8294-877C3AB3C0AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareBuildersProject_DataAccess", "ShareBuildersProject_DataAccess\ShareBuildersProject_DataAccess.csproj", "{898AE692-3A54-494E-A809-A8297605BEA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +23,22 @@ Global
 		{1AB489BF-A14B-45F5-BA13-EB5A41B388BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AB489BF-A14B-45F5-BA13-EB5A41B388BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AB489BF-A14B-45F5-BA13-EB5A41B388BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{426CCC1C-45BD-4137-A6FC-4FB3A78FEBCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{426CCC1C-45BD-4137-A6FC-4FB3A78FEBCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{426CCC1C-45BD-4137-A6FC-4FB3A78FEBCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{426CCC1C-45BD-4137-A6FC-4FB3A78FEBCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{959770CF-B9F7-498B-9AB8-88ECC994477A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{959770CF-B9F7-498B-9AB8-88ECC994477A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{959770CF-B9F7-498B-9AB8-88ECC994477A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{959770CF-B9F7-498B-9AB8-88ECC994477A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F6BC2C2-D695-4CFE-8294-877C3AB3C0AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F6BC2C2-D695-4CFE-8294-877C3AB3C0AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F6BC2C2-D695-4CFE-8294-877C3AB3C0AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F6BC2C2-D695-4CFE-8294-877C3AB3C0AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{898AE692-3A54-494E-A809-A8297605BEA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{898AE692-3A54-494E-A809-A8297605BEA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{898AE692-3A54-494E-A809-A8297605BEA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{898AE692-3A54-494E-A809-A8297605BEA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

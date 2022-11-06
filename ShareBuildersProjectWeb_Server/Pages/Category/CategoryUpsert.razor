@@ -1,0 +1,24 @@
+﻿@page "/CreateTheCategoryPage"
+
+<div class="row my-2">
+    <h3 class="card-title text-primary mb-3 ml-3">@Title Category</h3>
+
+    <div class="col-10">
+        <EditForm Model="Category">
+            <div class="form-group">
+                <Label>Name</Label>
+                <input class="form-control" type="text" @bind-value="Category.Name" />
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-primary py-2">@Title Category</button>
+                <NavLink href="CategoryListPage" class="btn btn-secondary">Back to Index</NavLink>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private Category Category { get; set; } = new Category();
+    private string Title { get; set; } = "Create";
+}

@@ -2,7 +2,9 @@
 @namespace ShareBuildersProjectWeb_Server.Pages
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-    Layout = "_Layout";
+    Layout = "_Layout";     //Default main page: '_Layout.cshtml'
 }
 
+@*//Builds main 'App.razor' component on server and passes it to the client*@
+@*//- App component is rendered below '_Layout'*@
 <component type="typeof(App)" render-mode="ServerPrerendered" />

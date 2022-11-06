@@ -6,4 +6,22 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ShareBuildersProject_DataAccess\ShareBuildersProject_DataAccess.csproj" />
+    <ProjectReference Include="..\ShareBuildersProject_Models\ShareBuildersProject_Models.csproj" />
+    <ProjectReference Include="..\ShareBuilders_Business\ShareBuildersProject_Business.csproj" />
+  </ItemGroup>
+
 </Project>
