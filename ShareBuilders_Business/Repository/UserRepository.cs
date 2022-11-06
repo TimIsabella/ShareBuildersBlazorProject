@@ -30,29 +30,29 @@ namespace ShareBuildersProject_Business.Repository
 
 		public List<User> GetAll()
 		{
-			var obj = _dbContext.Users.ToList();
+			var userList = _dbContext.Users.ToList();
 
-			return obj;
+			return userList;
 		}
 
 		public User GetById(int id)
 		{
-			var obj = _dbContext.Users.First(user => user.Id == id);
+			var user = _dbContext.Users.First(element => element.Id == id);
 
-			if(obj != null)
+			if(user != null)
 			{
-				return obj;
+				return user;
 			}
 			else return new User();
 		}
 
 		public User Update(User obj)
 		{
-			var user = _dbContext.Users.First(user => user.Id == obj.Id);
+			var user = _dbContext.Users.First(element => element.Id == obj.Id);
 
 			if(user != null)
 			{
-				User newUser = new User()
+				User updatedUser = new User()
 				{
 					Id = user.Id,
 					FirstName = obj.FirstName,
@@ -60,21 +60,21 @@ namespace ShareBuildersProject_Business.Repository
 					CreationDate = user.CreationDate
 				};
 
-				_dbContext.Users.Update(newUser);
+				_dbContext.Users.Update(updatedUser);
 				_dbContext.SaveChanges();
 
-				return newUser;
+				return updatedUser;
 			}
-			else return obj;
+			else return user;
 		}
 
 		public int Delete(int id)
 		{
-			var obj = _dbContext.Users.First(user => user.Id == id);
+			var user = _dbContext.Users.First(element => element.Id == id);
 
-			if(obj != null)
+			if(user != null)
 			{
-				_dbContext.Users.Remove(obj);
+				_dbContext.Users.Remove(user);
 				return _dbContext.SaveChanges();
 			}
 			else return 0;
