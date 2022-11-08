@@ -50,7 +50,7 @@ namespace ShareBuildersProjectWeb_Api.Services
 			var result = from user in _userRepository.GetAll()
 						 select new UserUiDTO()
 						 {
-							 Id = (int) user.Id,
+							 Id = (int)user.Id,
 							 FirstName = user.FirstName,
 							 LastName = user.LastName,
 							 StationsAssigned = (from userComp in _userCompositeRepository.GetAll()
@@ -59,7 +59,7 @@ namespace ShareBuildersProjectWeb_Api.Services
 												 on userComp.StationId equals station.Id
 												 select new StationUiDTO()
 												 {
-													 Id = (int) station.Id,
+													 Id = (int)station.Id,
 													 CallLetters = station.CallLetters,
 													 Owner = station.Owner,
 													 Format = station.Format

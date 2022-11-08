@@ -70,7 +70,7 @@ namespace ShareBuildersProjectWeb_Api.Services
 												   where affiliateComp.StationId == station.Id
 												   select new Affiliate()
 												   {
-													   Id = (int) affiliate.Id,
+													   Id = (int)affiliate.Id,
 													   Name = affiliate.Name,
 													   ShortName = affiliate.ShortName,
 													   City = affiliate.City,
@@ -83,7 +83,7 @@ namespace ShareBuildersProjectWeb_Api.Services
 													   where station.Id == broadcastTypeComp.StationId
 													   select new BroadcastType()
 													   {
-														   Id = (int) broadcastType.Id,
+														   Id = (int)broadcastType.Id,
 														   Name = broadcastType.Name
 													   }).ToList(),
 
@@ -93,7 +93,7 @@ namespace ShareBuildersProjectWeb_Api.Services
 												where station.Id == marketComp.StationId
 												select new Market()
 												{
-													Id = (int) market.Id,
+													Id = (int)market.Id,
 													Name = market.Name,
 													State = market.State
 												}).ToList(),
