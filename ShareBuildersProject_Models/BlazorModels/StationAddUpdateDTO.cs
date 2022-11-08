@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ShareBuildersProject_Models.BlazorModels
 {
-	public class StationDTO
+	public class StationAddUpdateDTO
 	{
 		public int? Id { get; set; }
 

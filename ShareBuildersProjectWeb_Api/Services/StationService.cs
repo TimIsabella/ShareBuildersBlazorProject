@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ShareBuildersProject_Business.Repository.IRepository;
+﻿using ShareBuildersProject_Business.Repository.IRepository;
 using ShareBuildersProject_DataAccess.Models;
 using ShareBuildersProject_Models.BlazorModels;
 
-namespace ShareBuildersProjectWeb_Api.Controllers
+namespace ShareBuildersProjectWeb_Api.Services
 {
-	[Route("api/Stations")]
-	[ApiController]
-	public class StationController : ControllerBase
+	public class StationService
 	{
 		private readonly IAffiliateRepository _affiliateRepository;
 		private readonly IBroadcastTypeRepository _broadcastTypeRepository;
@@ -16,12 +13,12 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 		private readonly IStationCompositeRepository _stationCompositeRepository;
 		private readonly IUserRepository _userRepository;
 
-		public StationController(IAffiliateRepository affiliateRepository, 
-								IBroadcastTypeRepository broadcastTypeRepository, 
-								IMarketRepository marketRepository, 
-								IStationRepository stationRepository, 
-								IStationCompositeRepository stationCompositeRepository, 
-								IUserRepository userRepository)
+		public StationService(IAffiliateRepository affiliateRepository,
+							  IBroadcastTypeRepository broadcastTypeRepository,
+							  IMarketRepository marketRepository,
+							  IStationRepository stationRepository,
+							  IStationCompositeRepository stationCompositeRepository,
+							  IUserRepository userRepository)
 		{
 			_affiliateRepository = affiliateRepository;
 			_broadcastTypeRepository = broadcastTypeRepository;
@@ -31,8 +28,7 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 			_userRepository = userRepository;
 		}
 
-		[HttpPost("CreateStation")]
-		public IActionResult CreateStation([FromForm] StationDTO stationData)
+		public Station CreateStation(StationAddUpdateDTO stationData)
 		{
 			Station newStation = new Station()
 			{
@@ -43,28 +39,27 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 
 			var result = _stationRepository.Create(newStation);
 
-			if(result.Id != null)
+			if (result.Id != null)
 			{
-				if(stationData.AffiliateIds != null)
+				if (stationData.AffiliateIds != null)
 				{ _stationCompositeRepository.CreateAffiliate((int)result.Id, stationData.AffiliateIds); }
-				
-				if(stationData.BroadcastTypeIds != null)
+
+				if (stationData.BroadcastTypeIds != null)
 				{ _stationCompositeRepository.CreateBroadcastType((int)result.Id, stationData.BroadcastTypeIds); }
-				
-				if(stationData.MarketIds != null)
+
+				if (stationData.MarketIds != null)
 				{ _stationCompositeRepository.CreateMarket((int)result.Id, stationData.MarketIds); }
 			}
 
-			return StatusCode(201, result);
+			return result;
 		}
 
-		[HttpGet("GetStationById/{id}")]
-		public IActionResult GetStationById(int id)
+		public IEnumerable<StationUiDTO> GetStationById(int id)
 		{
 			var result = from station in new List<Station>() { _stationRepository.GetById(id) } //List of single item
-						 select new
+						 select new StationUiDTO()
 						 {
-							 Id = station.Id,
+							 Id = (int) station.Id,
 							 CallLetters = station.CallLetters,
 							 Owner = station.Owner,
 							 Format = station.Format,
@@ -73,9 +68,9 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 												   join affiliateComp in _stationCompositeRepository.GetAllAffiliates()
 												   on affiliate.Id equals affiliateComp.AffiliateId
 												   where affiliateComp.StationId == station.Id
-												   select new
+												   select new Affiliate()
 												   {
-													   Id = affiliate.Id,
+													   Id = (int) affiliate.Id,
 													   Name = affiliate.Name,
 													   ShortName = affiliate.ShortName,
 													   City = affiliate.City,
@@ -86,9 +81,9 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 													   join broadcastTypeComp in _stationCompositeRepository.GetAllBroadcastTypes()
 													   on broadcastType.Id equals broadcastTypeComp.BroadcastTypeId
 													   where station.Id == broadcastTypeComp.StationId
-													   select new
+													   select new BroadcastType()
 													   {
-														   Id = broadcastType.Id,
+														   Id = (int) broadcastType.Id,
 														   Name = broadcastType.Name
 													   }).ToList(),
 
@@ -96,24 +91,23 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 												join marketComp in _stationCompositeRepository.GetAllMarkets()
 												on market.Id equals marketComp.MarketId
 												where station.Id == marketComp.StationId
-												select new
+												select new Market()
 												{
-													Id = market.Id,
+													Id = (int) market.Id,
 													Name = market.Name,
 													State = market.State
 												}).ToList(),
 						 };
 
-			return StatusCode(200, result);
+			return result;
 		}
 
-		[HttpGet("GetAllStations")]
-		public IActionResult GetAllStations()
+		public IEnumerable<StationUiDTO> GetAllStations()
 		{
 			var result = from station in _stationRepository.GetAll()
-						 select new
+						 select new StationUiDTO()
 						 {
-							 Id = station.Id,
+							 Id = (int)station.Id,
 							 CallLetters = station.CallLetters,
 							 Owner = station.Owner,
 							 Format = station.Format,
@@ -122,9 +116,9 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 												   join affiliateComp in _stationCompositeRepository.GetAllAffiliates()
 												   on affiliate.Id equals affiliateComp.AffiliateId
 												   where affiliateComp.StationId == station.Id
-												   select new
+												   select new Affiliate()
 												   {
-													   Id = affiliate.Id,
+													   Id = (int)affiliate.Id,
 													   Name = affiliate.Name,
 													   ShortName = affiliate.ShortName,
 													   City = affiliate.City,
@@ -135,9 +129,9 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 													   join broadcastTypeComp in _stationCompositeRepository.GetAllBroadcastTypes()
 													   on broadcastType.Id equals broadcastTypeComp.BroadcastTypeId
 													   where station.Id == broadcastTypeComp.StationId
-													   select new
+													   select new BroadcastType()
 													   {
-														   Id = broadcastType.Id,
+														   Id = (int)broadcastType.Id,
 														   Name = broadcastType.Name
 													   }).ToList(),
 
@@ -145,19 +139,18 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 												join marketComp in _stationCompositeRepository.GetAllMarkets()
 												on market.Id equals marketComp.MarketId
 												where station.Id == marketComp.StationId
-												select new
+												select new Market()
 												{
-													Id = market.Id,
+													Id = (int)market.Id,
 													Name = market.Name,
 													State = market.State
 												}).ToList(),
 						 };
 
-			return StatusCode(200, result);
+			return result;
 		}
 
-		[HttpPut("UpdateStation")]
-		public IActionResult Update([FromForm] StationDTO stationData)
+		public Station Update(StationAddUpdateDTO stationData)
 		{
 			Station updatedStation = new Station()
 			{
@@ -169,29 +162,28 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 
 			var result = _stationRepository.Update(updatedStation);
 
-			if(stationData.AffiliateIds != null)
+			if (stationData.AffiliateIds != null)
 			{
 				_stationCompositeRepository.DeleteAffiliate((int)stationData.Id);
-				_stationCompositeRepository.CreateAffiliate((int)result.Id, stationData.AffiliateIds); 
+				_stationCompositeRepository.CreateAffiliate((int)result.Id, stationData.AffiliateIds);
 			}
 
-			if(stationData.BroadcastTypeIds != null)
+			if (stationData.BroadcastTypeIds != null)
 			{
 				_stationCompositeRepository.DeleteBroadcastType((int)stationData.Id);
 				_stationCompositeRepository.CreateBroadcastType((int)result.Id, stationData.BroadcastTypeIds);
 			}
 
-			if(stationData.MarketIds != null)
+			if (stationData.MarketIds != null)
 			{
 				_stationCompositeRepository.DeleteMarket((int)stationData.Id);
 				_stationCompositeRepository.CreateMarket((int)result.Id, stationData.MarketIds);
 			}
 
-			return StatusCode(200, result);
+			return result;
 		}
 
-		[HttpDelete("DeleteStation/{id}")]
-		public IActionResult Delete(int id)
+		public int Delete(int id)
 		{
 			var result = _stationRepository.Delete(id);
 
@@ -199,7 +191,7 @@ namespace ShareBuildersProjectWeb_Api.Controllers
 			_stationCompositeRepository.DeleteBroadcastType(id);
 			_stationCompositeRepository.DeleteMarket(id);
 
-			return StatusCode(200, result);
+			return result;
 		}
 	}
 }

@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Data\" />
+    <Folder Include="Pages\Stations\" />
     <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 
@@ -16,9 +18,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.10" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ShareBuildersProjectWeb_Api\ShareBuildersProjectWeb_Api.csproj" />
     <ProjectReference Include="..\ShareBuildersProject_DataAccess\ShareBuildersProject_DataAccess.csproj" />
     <ProjectReference Include="..\ShareBuildersProject_Models\ShareBuildersProject_Models.csproj" />
     <ProjectReference Include="..\ShareBuilders_Business\ShareBuildersProject_Business.csproj" />

@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ShareBuildersProject_DataAccess\ShareBuildersProject_DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>

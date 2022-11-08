@@ -2,7 +2,7 @@
 
 namespace ShareBuildersProject_Models.BlazorModels
 {
-	public class UserDTO
+	public class UserAddUpdateDTO
 	{
 		public int? Id { get; set; }
 
