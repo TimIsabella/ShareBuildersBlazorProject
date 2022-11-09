@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareBuildersProject_Common
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareBuildersProject_DataAccess", "ShareBuildersProject_DataAccess\ShareBuildersProject_DataAccess.csproj", "{898AE692-3A54-494E-A809-A8297605BEA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareBuildersProjectWeb_Api", "ShareBuildersProjectWeb_Api\ShareBuildersProjectWeb_Api.csproj", "{02F2E95D-3342-4793-859A-AFC975D8BE4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareBuildersProjectWeb_Api", "ShareBuildersProjectWeb_Api\ShareBuildersProjectWeb_Api.csproj", "{02F2E95D-3342-4793-859A-AFC975D8BE4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

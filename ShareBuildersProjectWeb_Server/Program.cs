@@ -5,6 +5,7 @@ using ShareBuildersProject_Business.Repository.Composites;
 using ShareBuildersProject_Business.Repository.IRepository;
 using ShareBuildersProject_DataAccess.Data;
 using ShareBuildersProjectWeb_Api.Services;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +26,9 @@ builder.Services.AddScoped<IUserCompositeRepository, UserCompositeRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<StationService>();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));	//Add DbContext and configure SQL with connection string from 'appsettings.json'
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));   //Add DbContext and configure SQL with connection string from 'appsettings.json'
+
+builder.Services.AddMudServices(); //MudBlazor
 
 var app = builder.Build();
 

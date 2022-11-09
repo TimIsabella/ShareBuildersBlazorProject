@@ -41,32 +41,10 @@
 
 <br /><br />
 
-@*User Id Input: <input type="number" @bind="@UserId" @bind:event="oninput"/><br />
-First Name: <input type="text" @bind="@FirstName" @bind:event="oninput"/><br />
-Last Name: <input type="text" @bind="@LastName" @bind:event="oninput"/><br />
-StationIds: <input type="text" @bind="@StationIds" @bind:event="oninput"/><br />*@
-
 @code {
 	public List<UserUiDTO> GetAllUsersAssignedToStations()
 	{
 		var response = userService.GetAllUsersAssignedToStations();
-
-		var result = new List<UserUiDTO>();
-
-		foreach (var user in response)
-		{
-			var newUser = new UserUiDTO()
-				{
-					Id = (int)user.Id,
-					FirstName = user.FirstName,
-					LastName = user.LastName,
-					CreationDate = (DateTime)user.CreationDate,
-					StationsAssigned = user.StationsAssigned
-				}; 
-
-			result.Add(newUser);
-		}
-
-		return result;
+		return response.ToList();
 	}
 }

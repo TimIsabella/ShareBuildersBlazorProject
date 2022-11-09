@@ -1,0 +1,236 @@
+﻿@page "/Users/UserTable"
+@inject UserService userService
+@inject StationService stationService
+
+<MudText Typo="Typo.h4">User Account Details Edit</MudText>
+
+<br />
+
+<MudText Inline="true">Current Selection:  <b>@_selectedUser.FirstName @_selectedUser.LastName</b></MudText>
+<br /> <br />
+
+<MudButton OnClick="OnDeleteButtonClick" 
+    Variant="Variant.Filled" 
+    StartIcon="@Icons.Material.Filled.Delete" 
+    Color="Color.Error"
+    Size="Size.Small"
+    >Delete User
+</MudButton>
+
+<MudButton OnClick="OnSubmitChanges" 
+    Variant="Variant.Filled" 
+    StartIcon="@Icons.Material.Filled.Send" 
+    Color="Color.Warning"
+    Size="Size.Small"
+    >Update User
+</MudButton>
+
+<br />
+
+<MudTextField 
+    T="string"
+    @bind-Value="_selectedUserEdit.FirstName"
+    Counter="50" 
+    HelperText="Max 50 characters"
+    MaxLength="50"
+    Immediate="true" 
+    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" 
+    Label="First Name" 
+Variant="Variant.Text" />
+
+<MudTextField 
+    T="string"
+    @bind-Value="_selectedUserEdit.LastName"
+    Counter="50" 
+    HelperText="Max 50 characters"
+    MaxLength="50"
+    Immediate="true" 
+    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" 
+    Label="Last Name" 
+Variant="Variant.Text" />
+
+
+
+
+
+
+
+
+
+
+<MudSelect T="string" Label="Stations" MultiSelection="true" @bind-Value="_displayedStationValues" @bind-SelectedValues="_selectedStationValues">
+    @foreach(var station in _stationList)
+    {
+                <MudSelectItem T="string" Value="@station.CallLetters">@station.CallLetters</MudSelectItem>
+    }
+</MudSelect>
+
+
+
+
+
+
+
+
+
+
+
+
+<br /><br />
+<MudText Typo="Typo.h6">User Selection</MudText>
+<MudTable Items="@_userList" 
+    Dense=true 
+    Hover=true 
+    Bordered=true
+    Striped=true
+    Filter="new Func<UserUiDTO, bool>(FilterFunc1)"
+    T="UserUiDTO"
+    SelectedItemChanged="OnSelectUser">
+
+    <ToolBarContent>
+
+        <MudTextField @bind-Value="_searchString" 
+            Placeholder="Search" 
+            Adornment="Adornment.Start" 
+            AdornmentIcon="@Icons.Material.Filled.Search" 
+            IconSize="Size.Medium" Class="mt-0">
+        </MudTextField>
+
+    </ToolBarContent>
+
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>First Name</MudTh>
+        <MudTh>Last Name</MudTh>
+        @*<MudTh>Assigned Stations</MudTh>*@
+    </HeaderContent>
+
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="First Name">@context.FirstName</MudTd>
+        <MudTd DataLabel="Last Name">@context.LastName</MudTd>
+    </RowTemplate>
+
+    <PagerContent>
+
+        <MudTablePager />
+
+    </PagerContent>
+
+</MudTable>
+
+@code {
+
+    private string _displayedStationValues = "";
+    private IEnumerable<string> _selectedStationValues = new List<string>();
+
+    private string _searchString = "";
+
+    private UserUiDTO _selectedUser = new UserUiDTO();
+    private UserUiDTO _selectedUserEdit = new UserUiDTO();
+
+    private IEnumerable<UserUiDTO> _userList = new List<UserUiDTO>();
+    private IEnumerable<StationUiDTO> _stationList = new List<StationUiDTO>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var userData = userService.GetAllUsersAssignedToStations();
+        _userList = userData.ToList();
+
+        var stationData = stationService.GetAllStations();
+        _stationList = stationData.ToList();
+    }
+
+    //User select
+    private void OnSelectUser(UserUiDTO element)
+    {
+        _selectedUser = element;
+        _selectedUserEdit = new UserUiDTO() 
+        { 
+            Id = element.Id, 
+            FirstName = element.FirstName, 
+            LastName = element.LastName,
+            StationsAssigned = element.StationsAssigned
+        };
+
+        var stringList = new List<string>();
+        foreach(var station in element.StationsAssigned)
+        { stringList.Add(station.CallLetters); }
+
+        _selectedStationValues = stringList;
+    }
+
+    //Submit changes
+    private void OnSubmitChanges()
+    {
+        var stationCompositeList = new List<int>();
+        foreach(var selectedStation in _selectedStationValues)
+        {
+            foreach(var station in _stationList)
+            {
+                if (selectedStation == station.CallLetters)
+                {
+                    stationCompositeList.Add(station.Id);
+                    break;
+                }
+            }
+        }
+
+        int[] stationCompositeArray = stationCompositeList.ToArray();
+
+        var userForUpdate = new UserAddUpdateDTO()
+            {
+                Id = _selectedUserEdit.Id,
+                FirstName = _selectedUserEdit.FirstName,
+                LastName = _selectedUserEdit.LastName,
+                StationIds = stationCompositeArray
+            };
+
+        userService.Update(userForUpdate);
+
+        var updatedUser = new UserUiDTO()
+            {
+                Id = _selectedUserEdit.Id,
+                FirstName = _selectedUserEdit.FirstName,
+                LastName = _selectedUserEdit.LastName,
+                StationsAssigned = _selectedUserEdit.StationsAssigned
+            };
+
+        //Update user list
+        List<UserUiDTO> newList = _userList.ToList();
+        newList.Remove(newList.First(user => user.Id == updatedUser.Id));
+        newList.Add(updatedUser);
+        newList.Sort((element1, element2) => element1.Id.CompareTo(element2.Id));
+        _userList = newList;
+
+        //Update selection
+        _selectedUser = _selectedUserEdit;
+
+        StateHasChanged();
+    }
+
+    private void OnDeleteButtonClick()
+    {
+        Console.WriteLine("OnDeleteButtonClick()");
+    }
+
+    private bool FilterFunc1(UserUiDTO element) => FilterFunc(element, _searchString);
+
+    //Search filter
+    private bool FilterFunc(UserUiDTO element, string searchString)
+    {
+        if(string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if(element.FirstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if(element.LastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+    private IEnumerable<string> MaxCharacters(string ch)
+    {
+        if (!string.IsNullOrEmpty(ch) && 50 < ch?.Length)
+            yield return "Max 50 characters";
+    }
+}
