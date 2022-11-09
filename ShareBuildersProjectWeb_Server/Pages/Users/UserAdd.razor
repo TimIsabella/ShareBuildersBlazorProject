@@ -1,0 +1,98 @@
+﻿@page "/Users/UserAdd"
+@inject UserService userService
+@inject StationService stationService
+
+<MudText Typo="Typo.h4">New User Creation</MudText>
+
+<br />
+
+<MudButton OnClick="OnSubmitNewUser" 
+    Variant="Variant.Filled" 
+    StartIcon="@Icons.Material.Filled.Send" 
+    Color="Color.Success"
+    Size="Size.Small"
+    >Create User
+</MudButton>
+
+<br />
+
+<MudTextField 
+    T="string"
+    @bind-Value="_newUser.FirstName"
+    Counter="50" 
+    HelperText="Max 50 characters"
+    MaxLength="50"
+    Immediate="true" 
+    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" 
+    Label="First Name" 
+Variant="Variant.Text" />
+
+<MudTextField 
+    T="string"
+    @bind-Value="_newUser.LastName"
+    Counter="50" 
+    HelperText="Max 50 characters"
+    MaxLength="50"
+    Immediate="true" 
+    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" 
+    Label="Last Name" 
+Variant="Variant.Text" />
+
+
+<MudSelect T="string" Label="Stations" MultiSelection="true" @bind-Value="_displayedStationValues" @bind-SelectedValues="_selectedStationValues">
+    @foreach(var station in _stationList)
+    {
+                <MudSelectItem T="string" Value="@station.CallLetters">@station.CallLetters</MudSelectItem>
+    }
+</MudSelect>
+
+
+@code {
+    private UserUiDTO _newUser = new UserUiDTO();
+    private string _displayedStationValues = "";
+    private IEnumerable<string> _selectedStationValues = new List<string>();
+    private IEnumerable<StationUiDTO> _stationList = new List<StationUiDTO>();
+
+    //Get all stations
+    protected override async Task OnInitializedAsync()
+    {
+        var stationData = stationService.GetAllStations();
+        _stationList = stationData.ToList();
+    }
+
+    //Submit new user
+    private void OnSubmitNewUser()
+    {
+        //Correlate station selection with id for composite table
+        var stationCompositeList = new List<int>();
+        foreach(var selectedStation in _selectedStationValues)
+        {
+            foreach(var station in _stationList)
+            {
+                if (selectedStation == station.CallLetters)
+                {
+                    stationCompositeList.Add(station.Id);
+                    break;
+                }
+            }
+        }
+
+        int[] stationCompositeArray = stationCompositeList.ToArray();
+
+        var newUser = new UserAddUpdateDTO()
+            {
+                Id = _newUser.Id,
+                FirstName = _newUser.FirstName,
+                LastName = _newUser.LastName,
+                StationIds = stationCompositeArray
+            };
+
+        userService.CreateUser(newUser);
+    }
+
+    private IEnumerable<string> MaxCharacters(string chars)
+    {
+        if(!string.IsNullOrEmpty(chars) && 50 < chars?.Length)
+            yield return "Max 50 characters";
+    }
+}

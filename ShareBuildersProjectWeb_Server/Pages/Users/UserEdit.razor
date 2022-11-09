@@ -1,4 +1,4 @@
-﻿@page "/Users/UserTable"
+﻿@page "/Users/UserEdit"
 @inject UserService userService
 @inject StationService stationService
 
@@ -14,7 +14,7 @@
     StartIcon="@Icons.Material.Filled.Delete" 
     Color="Color.Error"
     Size="Size.Small"
-    >Delete User
+    >
 </MudButton>
 
 <MudButton OnClick="OnSubmitChanges" 
@@ -25,7 +25,7 @@
     >Update User
 </MudButton>
 
-<br />
+<br /> <br />
 
 <MudTextField 
     T="string"
@@ -49,14 +49,7 @@ Variant="Variant.Text" />
     Label="Last Name" 
 Variant="Variant.Text" />
 
-
-
-
-
-
-
-
-
+<br />
 
 <MudSelect T="string" Label="Stations" MultiSelection="true" @bind-Value="_displayedStationValues" @bind-SelectedValues="_selectedStationValues">
     @foreach(var station in _stationList)
@@ -65,18 +58,8 @@ Variant="Variant.Text" />
     }
 </MudSelect>
 
-
-
-
-
-
-
-
-
-
-
-
 <br /><br />
+
 <MudText Typo="Typo.h6">User Selection</MudText>
 <MudTable Items="@_userList" 
     Dense=true 
@@ -120,18 +103,15 @@ Variant="Variant.Text" />
 </MudTable>
 
 @code {
-
-    private string _displayedStationValues = "";
-    private IEnumerable<string> _selectedStationValues = new List<string>();
-
     private string _searchString = "";
-
+    private string _displayedStationValues = "";
     private UserUiDTO _selectedUser = new UserUiDTO();
     private UserUiDTO _selectedUserEdit = new UserUiDTO();
-
+    private IEnumerable<string> _selectedStationValues = new List<string>();
     private IEnumerable<UserUiDTO> _userList = new List<UserUiDTO>();
     private IEnumerable<StationUiDTO> _stationList = new List<StationUiDTO>();
 
+    //Get all users and stations
     protected override async Task OnInitializedAsync()
     {
         var userData = userService.GetAllUsersAssignedToStations();
@@ -163,6 +143,7 @@ Variant="Variant.Text" />
     //Submit changes
     private void OnSubmitChanges()
     {
+        //Correlate station selection with id for composite table
         var stationCompositeList = new List<int>();
         foreach(var selectedStation in _selectedStationValues)
         {
@@ -188,6 +169,7 @@ Variant="Variant.Text" />
 
         userService.Update(userForUpdate);
 
+        //Update user list
         var updatedUser = new UserUiDTO()
             {
                 Id = _selectedUserEdit.Id,
@@ -196,7 +178,6 @@ Variant="Variant.Text" />
                 StationsAssigned = _selectedUserEdit.StationsAssigned
             };
 
-        //Update user list
         List<UserUiDTO> newList = _userList.ToList();
         newList.Remove(newList.First(user => user.Id == updatedUser.Id));
         newList.Add(updatedUser);
@@ -206,17 +187,32 @@ Variant="Variant.Text" />
         //Update selection
         _selectedUser = _selectedUserEdit;
 
-        StateHasChanged();
+        //StateHasChanged();
     }
 
+    //Delete record
     private void OnDeleteButtonClick()
     {
-        Console.WriteLine("OnDeleteButtonClick()");
+        if(_selectedUser.Id != 0)
+        {
+            //Delete user
+            userService.Delete(_selectedUser.Id);
+
+            //Update user list
+            List<UserUiDTO> newList = _userList.ToList();
+            newList.Remove(newList.First(user => user.Id == _selectedUser.Id));
+            _userList = newList;
+
+            //Reset fields
+            _selectedUser = new UserUiDTO();
+            _selectedUserEdit = new UserUiDTO();
+            _displayedStationValues = "";
+            _selectedStationValues = new List<string>();
+        }
     }
 
-    private bool FilterFunc1(UserUiDTO element) => FilterFunc(element, _searchString);
-
     //Search filter
+    private bool FilterFunc1(UserUiDTO element) => FilterFunc(element, _searchString);
     private bool FilterFunc(UserUiDTO element, string searchString)
     {
         if(string.IsNullOrWhiteSpace(searchString))
@@ -228,9 +224,9 @@ Variant="Variant.Text" />
         return false;
     }
 
-    private IEnumerable<string> MaxCharacters(string ch)
+    private IEnumerable<string> MaxCharacters(string chars)
     {
-        if (!string.IsNullOrEmpty(ch) && 50 < ch?.Length)
+        if(!string.IsNullOrEmpty(chars) && 50 < chars?.Length)
             yield return "Max 50 characters";
     }
 }
