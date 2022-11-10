@@ -11,21 +11,18 @@ namespace ShareBuildersProjectWeb_Api.Services
 		private readonly IMarketRepository _marketRepository;
 		private readonly IStationRepository _stationRepository;
 		private readonly IStationCompositeRepository _stationCompositeRepository;
-		private readonly IUserRepository _userRepository;
 
 		public StationService(IAffiliateRepository affiliateRepository,
 							  IBroadcastTypeRepository broadcastTypeRepository,
 							  IMarketRepository marketRepository,
 							  IStationRepository stationRepository,
-							  IStationCompositeRepository stationCompositeRepository,
-							  IUserRepository userRepository)
+							  IStationCompositeRepository stationCompositeRepository)
 		{
 			_affiliateRepository = affiliateRepository;
 			_broadcastTypeRepository = broadcastTypeRepository;
 			_marketRepository = marketRepository;
 			_stationRepository = stationRepository;
 			_stationCompositeRepository = stationCompositeRepository;
-			_userRepository = userRepository;
 		}
 
 		public Station CreateStation(StationAddUpdateDTO stationData)

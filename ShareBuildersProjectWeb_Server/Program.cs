@@ -1,11 +1,10 @@
-using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
-using ShareBuildersProject_Business.Repository;
-using ShareBuildersProject_Business.Repository.Composites;
-using ShareBuildersProject_Business.Repository.IRepository;
 using ShareBuildersProject_DataAccess.Data;
 using ShareBuildersProjectWeb_Api.Services;
 using MudBlazor.Services;
+using ShareBuildersProject_Business.Repository.Composites;
+using ShareBuildersProject_Business.Repository.IRepository;
+using ShareBuildersProject_Business.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +22,9 @@ builder.Services.AddScoped<IStationCompositeRepository, StationCompositeReposito
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserCompositeRepository, UserCompositeRepository>();
 
+builder.Services.AddScoped<AffiliateService>();
+builder.Services.AddScoped<BroadcastTypeService>();
+builder.Services.AddScoped<MarketService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<StationService>();
 

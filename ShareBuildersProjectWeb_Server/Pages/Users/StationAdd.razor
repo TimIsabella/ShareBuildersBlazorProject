@@ -1,0 +1,139 @@
+﻿@page "/Station/StationAdd"
+@inject UserService userService
+@inject StationService stationService
+@inject AffiliateService affiliateService
+@inject BroadcastTypeService broadcastTypeService
+@inject MarketService marketService
+
+<MudText Typo="Typo.h4">New Station Creation</MudText>
+
+<br />
+
+<MudButton OnClick="OnSubmitNewStation" 
+    Variant="Variant.Filled" 
+    StartIcon="@Icons.Material.Filled.Send" 
+    Color="Color.Success"
+    Size="Size.Small"
+    >Create Station
+</MudButton>
+
+<br />
+
+<MudTextField 
+    T="string"
+    @bind-Value="_newStation.CallLetters"
+    Counter="50" 
+    HelperText="Max 50 characters"
+    MaxLength="50"
+    Immediate="true" 
+    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" 
+    Label="Call Letters" 
+Variant="Variant.Text" />
+
+<MudTextField 
+    T="string"
+    @bind-Value="_newStation.Owner"
+    Counter="50" 
+    HelperText="Max 50 characters"
+    MaxLength="50"
+    Immediate="true" 
+    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" 
+    Label="Owner" 
+Variant="Variant.Text" />
+
+<MudTextField 
+    T="string"
+    @bind-Value="_newStation.Format"
+    Counter="50" 
+    HelperText="Max 50 characters"
+    MaxLength="50"
+    Immediate="true" 
+    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" 
+    Label="Format" 
+Variant="Variant.Text" />
+
+<MudSelect T="string" Label="Affiliates" MultiSelection="true" @bind-Value="_displayedAffiliateValues" @bind-SelectedValues="_selectedAffiliateValues">
+    @foreach(var affiliate in _affiliatesList)
+    {
+        <MudSelectItem T="string" Value="@affiliate.ShortName">@affiliate.ShortName</MudSelectItem>
+    }
+</MudSelect>
+
+<MudSelect T="string" Label="BroadcastType" MultiSelection="true" @bind-Value="_displayedBroadcastTypeValues" @bind-SelectedValues="_selectedBroadcastTypeValues">
+    @foreach(var broadcastType in _broadcastTypesList)
+    {
+        <MudSelectItem T="string" Value="@broadcastType.Name">@broadcastType.Name</MudSelectItem>
+    }
+</MudSelect>
+
+<MudSelect T="string" Label="Affiliates" MultiSelection="true" @bind-Value="_displayedMarketValues" @bind-SelectedValues="_selectedMarketValues">
+    @foreach(var market in _marketsList)
+    {
+        <MudSelectItem T="string" Value="@market.Name">@market.Name</MudSelectItem>
+    }
+</MudSelect>
+
+@code {
+    private StationUiDTO _newStation = new StationUiDTO();
+
+    private string _displayedAffiliateValues = "";
+    private IEnumerable<string> _selectedAffiliateValues = new List<string>();
+    private IEnumerable<Affiliate> _affiliatesList = new List<Affiliate>();
+
+    private string _displayedBroadcastTypeValues = "";
+    private IEnumerable<string> _selectedBroadcastTypeValues = new List<string>();
+    private IEnumerable<BroadcastType> _broadcastTypesList = new List<BroadcastType>();
+
+    private string _displayedMarketValues = "";
+    private IEnumerable<string> _selectedMarketValues = new List<string>();
+    private IEnumerable<Market> _marketsList = new List<Market>();
+
+    //Get all stations
+    protected override async Task OnInitializedAsync()
+    {
+        var affiliateData = affiliateService.GetAllAffiliates();
+        _affiliatesList = affiliateData.ToList();
+
+        var broadcastTypeData = broadcastTypeService.GetAllBroadcastTypes();
+        _broadcastTypesList = broadcastTypeData.ToList();
+
+        var marketData = marketService.GetAllMarkets();
+        _marketsList = marketData.ToList();
+    }
+
+    //Submit new station
+    private void OnSubmitNewStation()
+    {
+        //Correlate station selection with id for composite table
+        //var stationCompositeList = new List<int>();
+        //foreach(var selectedStation in _selectedStationValues)
+        //{
+        //    foreach(var station in _stationList)
+        //    {
+        //        if (selectedStation == station.CallLetters)
+        //        {
+        //            stationCompositeList.Add(station.Id);
+        //            break;
+        //        }
+        //    }
+        //}
+
+        //int[] stationCompositeArray = stationCompositeList.ToArray();
+
+        //var newUser = new StationAddUpdateDTO()
+        //    {
+        //        Id = _newStation.Id,
+        //        FirstName = _newStation.FirstName,
+        //        LastName = _newStation.LastName,
+        //        StationIds = stationCompositeArray
+        //    };
+
+        //userService.CreateUser(newUser);
+    }
+
+    private IEnumerable<string> MaxCharacters(string chars)
+    {
+        if(!string.IsNullOrEmpty(chars) && 50 < chars?.Length)
+            yield return "Max 50 characters";
+    }
+}
