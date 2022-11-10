@@ -2,7 +2,7 @@
 @inject UserService userService
 @inject StationService stationService
 
-<MudText Typo="Typo.h4">User Account Details Edit</MudText>
+<MudText Typo="Typo.h4">User Account Edit</MudText>
 
 <br />
 
@@ -15,7 +15,7 @@
     StartIcon="@Icons.Material.Filled.Send" 
     Color="Color.Warning"
     Size="Size.Small"
-    >Update User
+    >Update
 </MudButton>
 
 <MudButton OnClick="OnDeleteButtonClick" 
@@ -23,42 +23,52 @@
     StartIcon="@Icons.Material.Filled.Delete" 
     Color="Color.Error"
     Size="Size.Small"
-    >
+    >Delete
 </MudButton>
 
-<br /> <br />
+<br /><br /><br />
 
 <MudTextField 
+    Label="First Name" 
     T="string"
     @bind-Value="_selectedUserEdit.FirstName"
+    Immediate="true" 
     Counter="50" 
     HelperText="Max 50 characters"
     MaxLength="50"
-    Immediate="true" 
-    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" 
-    Label="First Name" 
-Variant="Variant.Text" />
+    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))"
+    Variant="Variant.Outlined">
+</MudTextField>
 
 <br />
 
 <MudTextField 
+    Label="Last Name" 
     T="string"
     @bind-Value="_selectedUserEdit.LastName"
+    Immediate="true"
     Counter="50" 
     HelperText="Max 50 characters"
     MaxLength="50"
-    Immediate="true" 
     Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" 
-    Label="Last Name" 
-Variant="Variant.Text" />
+    Variant="Variant.Outlined">
+</MudTextField>
 
 <br />
 
-<MudSelect T="string" Label="Stations" MultiSelection="true" @bind-Value="_displayedStationValues" @bind-SelectedValues="_selectedStationValues">
+<MudSelect 
+    T="string" 
+    Label="Stations" 
+    MultiSelection="true" 
+    @bind-Value="_displayedStationValues" 
+    @bind-SelectedValues="_selectedStationValues"
+    Variant="Variant.Outlined">
+
     @foreach(var station in _stationList)
     {
-                <MudSelectItem T="string" Value="@station.CallLetters">@station.CallLetters</MudSelectItem>
+        <MudSelectItem T="string" Value="@station.CallLetters">@station.CallLetters</MudSelectItem>
     }
+
 </MudSelect>
 
 <br /><br />
@@ -88,7 +98,6 @@ Variant="Variant.Text" />
         <MudTh>Id</MudTh>
         <MudTh>First Name</MudTh>
         <MudTh>Last Name</MudTh>
-        @*<MudTh>Assigned Stations</MudTh>*@
     </HeaderContent>
 
     <RowTemplate>
@@ -98,9 +107,7 @@ Variant="Variant.Text" />
     </RowTemplate>
 
     <PagerContent>
-
         <MudTablePager />
-
     </PagerContent>
 
 </MudTable>

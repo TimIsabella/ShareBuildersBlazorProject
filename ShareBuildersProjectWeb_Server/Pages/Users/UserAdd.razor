@@ -14,36 +14,48 @@
     >Create User
 </MudButton>
 
-<br />
+<br /><br />
 
-<MudTextField 
+<MudTextField
+    Label="First Name"
     T="string"
     @bind-Value="_newUser.FirstName"
-    Counter="50" 
+    Immediate="true"
+    Counter="50"
     HelperText="Max 50 characters"
     MaxLength="50"
-    Immediate="true" 
-    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" 
-    Label="First Name" 
-Variant="Variant.Text" />
+    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))"
+    Variant="Variant.Outlined">
+</MudTextField>
 
-<MudTextField 
+<br />
+
+<MudTextField
+    Label="Last Name"
     T="string"
     @bind-Value="_newUser.LastName"
-    Counter="50" 
+    Immediate="true"
+    Counter="50"
     HelperText="Max 50 characters"
     MaxLength="50"
-    Immediate="true" 
-    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" 
-    Label="Last Name" 
-Variant="Variant.Text" />
+    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))"
+    Variant="Variant.Outlined">
+</MudTextField>
 
+<br />
 
-<MudSelect T="string" Label="Stations" MultiSelection="true" @bind-Value="_displayedStationValues" @bind-SelectedValues="_selectedStationValues">
+<MudSelect 
+    T="string" 
+    Label="Stations" 
+    MultiSelection="true" @bind-Value="_displayedStationValues" 
+    @bind-SelectedValues="_selectedStationValues"
+    Variant="Variant.Outlined">
+
     @foreach(var station in _stationList)
     {
-                <MudSelectItem T="string" Value="@station.CallLetters">@station.CallLetters</MudSelectItem>
+        <MudSelectItem T="string" Value="@station.CallLetters">@station.CallLetters</MudSelectItem>
     }
+
 </MudSelect>
 
 

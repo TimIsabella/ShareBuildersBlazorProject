@@ -17,56 +17,86 @@
     >Create Station
 </MudButton>
 
-<br />
+<br /><br />
 
-<MudTextField 
+<MudTextField
+    Label="Call Letters" 
     T="string"
     @bind-Value="_newStation.CallLetters"
+    Immediate="true" 
     Counter="50" 
     HelperText="Max 50 characters"
     MaxLength="50"
-    Immediate="true" 
-    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" 
-    Label="Call Letters" 
-Variant="Variant.Text" />
+    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))"
+    Variant="Variant.Outlined">
+</MudTextField>
 
-<MudTextField 
+<br />
+
+<MudTextField
+    Label="Owner"
     T="string"
     @bind-Value="_newStation.Owner"
+    Immediate="true" 
     Counter="50" 
     HelperText="Max 50 characters"
     MaxLength="50"
-    Immediate="true" 
-    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" 
-    Label="Owner" 
-Variant="Variant.Text" />
+    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))"
+    Variant="Variant.Outlined">
+</MudTextField>
 
-<MudTextField 
+<br />
+
+<MudTextField
+    Label="Format"
     T="string"
     @bind-Value="_newStation.Format"
+    Immediate="true" 
     Counter="50" 
     HelperText="Max 50 characters"
     MaxLength="50"
-    Immediate="true" 
-    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" 
-    Label="Format" 
-Variant="Variant.Text" />
+    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))"
+    Variant="Variant.Outlined">
+</MudTextField>
 
-<MudSelect T="string" Label="Affiliates" MultiSelection="true" @bind-Value="_displayedAffiliateValues" @bind-SelectedValues="_selectedAffiliateValues">
+<br />
+
+<MudSelect 
+    T="string" 
+    Label="Affiliates" 
+    MultiSelection="true" 
+    @bind-Value="_displayedAffiliateValues" 
+    @bind-SelectedValues="_selectedAffiliateValues"
+    Variant="Variant.Outlined">
+
     @foreach(var affiliate in _affiliateList)
     {
         <MudSelectItem T="string" Value="@affiliate.ShortName">@affiliate.ShortName</MudSelectItem>
     }
 </MudSelect>
 
-<MudSelect T="string" Label="BroadcastType" MultiSelection="true" @bind-Value="_displayedBroadcastTypeValues" @bind-SelectedValues="_selectedBroadcastTypeValues">
+<MudSelect 
+    T="string" 
+    Label="BroadcastType" 
+    MultiSelection="true" 
+    @bind-Value="_displayedBroadcastTypeValues" 
+    @bind-SelectedValues="_selectedBroadcastTypeValues"
+    Variant="Variant.Outlined">
+
     @foreach(var broadcastType in _broadcastTypeList)
     {
         <MudSelectItem T="string" Value="@broadcastType.Name">@broadcastType.Name</MudSelectItem>
     }
 </MudSelect>
 
-<MudSelect T="string" Label="Markets" MultiSelection="true" @bind-Value="_displayedMarketValues" @bind-SelectedValues="_selectedMarketValues">
+<MudSelect 
+    T="string" 
+    Label="Markets" 
+    MultiSelection="true" 
+    @bind-Value="_displayedMarketValues" 
+    @bind-SelectedValues="_selectedMarketValues"
+    Variant="Variant.Outlined">
+
     @foreach(var market in _marketsList)
     {
         <MudSelectItem T="string" Value="@market.Name">@market.Name</MudSelectItem>
