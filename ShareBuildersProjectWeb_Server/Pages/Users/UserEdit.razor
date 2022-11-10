@@ -7,15 +7,8 @@
 <br />
 
 <MudText Inline="true">Current Selection:  <b>@_selectedUser.FirstName @_selectedUser.LastName</b></MudText>
-<br /> <br />
 
-<MudButton OnClick="OnDeleteButtonClick" 
-    Variant="Variant.Filled" 
-    StartIcon="@Icons.Material.Filled.Delete" 
-    Color="Color.Error"
-    Size="Size.Small"
-    >
-</MudButton>
+<br /> <br />
 
 <MudButton OnClick="OnSubmitChanges" 
     Variant="Variant.Filled" 
@@ -23,6 +16,14 @@
     Color="Color.Warning"
     Size="Size.Small"
     >Update User
+</MudButton>
+
+<MudButton OnClick="OnDeleteButtonClick" 
+    Variant="Variant.Filled" 
+    StartIcon="@Icons.Material.Filled.Delete" 
+    Color="Color.Error"
+    Size="Size.Small"
+    >
 </MudButton>
 
 <br /> <br />
@@ -37,6 +38,8 @@
     Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" 
     Label="First Name" 
 Variant="Variant.Text" />
+
+<br />
 
 <MudTextField 
     T="string"
@@ -145,6 +148,7 @@ Variant="Variant.Text" />
     {
         //Correlate station selection with id for composite table
         var stationCompositeList = new List<int>();
+        var newSelectedStationsList = new List<StationUiDTO>();
         foreach(var selectedStation in _selectedStationValues)
         {
             foreach(var station in _stationList)
@@ -152,11 +156,13 @@ Variant="Variant.Text" />
                 if (selectedStation == station.CallLetters)
                 {
                     stationCompositeList.Add(station.Id);
+                    newSelectedStationsList.Add(station);
                     break;
                 }
             }
         }
 
+        //Convert selection list to array
         int[] stationCompositeArray = stationCompositeList.ToArray();
 
         var userForUpdate = new UserAddUpdateDTO()
@@ -167,6 +173,7 @@ Variant="Variant.Text" />
                 StationIds = stationCompositeArray
             };
 
+        //Update user
         userService.Update(userForUpdate);
 
         //Update user list
@@ -175,7 +182,7 @@ Variant="Variant.Text" />
                 Id = _selectedUserEdit.Id,
                 FirstName = _selectedUserEdit.FirstName,
                 LastName = _selectedUserEdit.LastName,
-                StationsAssigned = _selectedUserEdit.StationsAssigned
+                StationsAssigned = newSelectedStationsList
             };
 
         List<UserUiDTO> newList = _userList.ToList();
