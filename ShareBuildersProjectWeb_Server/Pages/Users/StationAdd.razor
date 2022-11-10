@@ -53,20 +53,20 @@ Variant="Variant.Text" />
 Variant="Variant.Text" />
 
 <MudSelect T="string" Label="Affiliates" MultiSelection="true" @bind-Value="_displayedAffiliateValues" @bind-SelectedValues="_selectedAffiliateValues">
-    @foreach(var affiliate in _affiliatesList)
+    @foreach(var affiliate in _affiliateList)
     {
         <MudSelectItem T="string" Value="@affiliate.ShortName">@affiliate.ShortName</MudSelectItem>
     }
 </MudSelect>
 
 <MudSelect T="string" Label="BroadcastType" MultiSelection="true" @bind-Value="_displayedBroadcastTypeValues" @bind-SelectedValues="_selectedBroadcastTypeValues">
-    @foreach(var broadcastType in _broadcastTypesList)
+    @foreach(var broadcastType in _broadcastTypeList)
     {
         <MudSelectItem T="string" Value="@broadcastType.Name">@broadcastType.Name</MudSelectItem>
     }
 </MudSelect>
 
-<MudSelect T="string" Label="Affiliates" MultiSelection="true" @bind-Value="_displayedMarketValues" @bind-SelectedValues="_selectedMarketValues">
+<MudSelect T="string" Label="Markets" MultiSelection="true" @bind-Value="_displayedMarketValues" @bind-SelectedValues="_selectedMarketValues">
     @foreach(var market in _marketsList)
     {
         <MudSelectItem T="string" Value="@market.Name">@market.Name</MudSelectItem>
@@ -78,11 +78,11 @@ Variant="Variant.Text" />
 
     private string _displayedAffiliateValues = "";
     private IEnumerable<string> _selectedAffiliateValues = new List<string>();
-    private IEnumerable<Affiliate> _affiliatesList = new List<Affiliate>();
+    private IEnumerable<Affiliate> _affiliateList = new List<Affiliate>();
 
     private string _displayedBroadcastTypeValues = "";
     private IEnumerable<string> _selectedBroadcastTypeValues = new List<string>();
-    private IEnumerable<BroadcastType> _broadcastTypesList = new List<BroadcastType>();
+    private IEnumerable<BroadcastType> _broadcastTypeList = new List<BroadcastType>();
 
     private string _displayedMarketValues = "";
     private IEnumerable<string> _selectedMarketValues = new List<string>();
@@ -92,10 +92,10 @@ Variant="Variant.Text" />
     protected override async Task OnInitializedAsync()
     {
         var affiliateData = affiliateService.GetAllAffiliates();
-        _affiliatesList = affiliateData.ToList();
+        _affiliateList = affiliateData.ToList();
 
         var broadcastTypeData = broadcastTypeService.GetAllBroadcastTypes();
-        _broadcastTypesList = broadcastTypeData.ToList();
+        _broadcastTypeList = broadcastTypeData.ToList();
 
         var marketData = marketService.GetAllMarkets();
         _marketsList = marketData.ToList();
@@ -104,31 +104,65 @@ Variant="Variant.Text" />
     //Submit new station
     private void OnSubmitNewStation()
     {
-        //Correlate station selection with id for composite table
-        //var stationCompositeList = new List<int>();
-        //foreach(var selectedStation in _selectedStationValues)
-        //{
-        //    foreach(var station in _stationList)
-        //    {
-        //        if (selectedStation == station.CallLetters)
-        //        {
-        //            stationCompositeList.Add(station.Id);
-        //            break;
-        //        }
-        //    }
-        //}
+        //Correlate affiliate selection with id for composite table
+        var affiliateCompositeList = new List<int>();
+        foreach(var selectedAffiliate in _selectedAffiliateValues)
+        {
+            foreach(var affiliate in _affiliateList)
+            {
+                if(selectedAffiliate == affiliate.ShortName)
+                {
+                    affiliateCompositeList.Add((int)affiliate.Id);
+                    break;
+                }
+            }
+        }
 
-        //int[] stationCompositeArray = stationCompositeList.ToArray();
+        //Correlate broadcastType selection with id for composite table
+        var broadcastTypeCompositeList = new List<int>();
+        foreach(var selectedBroadcastType in _selectedBroadcastTypeValues)
+        {
+            foreach(var broadcastType in _broadcastTypeList)
+            {
+                if(selectedBroadcastType == broadcastType.Name)
+                {
+                    broadcastTypeCompositeList.Add((int)broadcastType.Id);
+                    break;
+                }
+            }
+        }
 
-        //var newUser = new StationAddUpdateDTO()
-        //    {
-        //        Id = _newStation.Id,
-        //        FirstName = _newStation.FirstName,
-        //        LastName = _newStation.LastName,
-        //        StationIds = stationCompositeArray
-        //    };
+        //Correlate affiliate selection with id for composite table
+        var marketCompositeList = new List<int>();
+        foreach(var selectedMarket in _selectedMarketValues)
+        {
+            foreach(var market in _marketsList)
+            {
+                if(selectedMarket == market.Name)
+                {
+                    marketCompositeList.Add((int)market.Id);
+                    break;
+                }
+            }
+        }
 
-        //userService.CreateUser(newUser);
+        //Convert selection lists to arrays
+        int[] affiliateCompositeArray = affiliateCompositeList.ToArray();
+        int[] broadcastTypeCompositeArray = broadcastTypeCompositeList.ToArray();
+        int[] marketCompositeArray = marketCompositeList.ToArray();
+
+        var newstation = new StationAddUpdateDTO()
+            {
+                CallLetters = _newStation.CallLetters,
+                Owner = _newStation.Owner,
+                Format = _newStation.Format,
+                AffiliateIds = affiliateCompositeArray,
+                BroadcastTypeIds = broadcastTypeCompositeArray,
+                MarketIds = marketCompositeArray
+            };
+
+        //Create new station
+        stationService.CreateStation(newstation);
     }
 
     private IEnumerable<string> MaxCharacters(string chars)
