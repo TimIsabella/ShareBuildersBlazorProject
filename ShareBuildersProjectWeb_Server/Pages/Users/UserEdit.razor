@@ -1,4 +1,5 @@
 ﻿@page "/Users/UserEdit"
+@inject ISnackbar Snackbar
 @inject UserService userService
 @inject StationService stationService
 
@@ -202,15 +203,21 @@
             newList.Sort((element1, element2) => element1.Id.CompareTo(element2.Id));
             _userList = newList;
 
+            Snackbar.Add($"'{_selectedUser.FirstName} {_selectedUser.LastName}' sucessfully updated!");
+
             //Update selection
             _selectedUser = _selectedUserEdit;
+        }
+        else
+        {
+            Snackbar.Add("No Record Selected");
         }
     }
 
     //Delete record
     private void OnDeleteButtonClick()
     {
-        if(_selectedUser.Id != 0)
+        if (_selectedUser.Id != 0)
         {
             //Delete user
             userService.Delete(_selectedUser.Id);
@@ -220,11 +227,14 @@
             newList.Remove(newList.First(user => user.Id == _selectedUser.Id));
             _userList = newList;
 
+            Snackbar.Add($"'{_selectedUser.FirstName} {_selectedUser.LastName}' sucessfully deleted!");
+
             //Reset fields
-            _selectedUser = new UserUiDTO();
-            _selectedUserEdit = new UserUiDTO();
-            _displayedStationValues = "";
-            _selectedStationValues = new List<string>();
+            ResetFields();
+        }
+        else
+        { 
+            Snackbar.Add("No Record Selected");
         }
     }
 
@@ -241,9 +251,19 @@
         return false;
     }
 
+    //Fields character counter
     private IEnumerable<string> MaxCharacters(string chars)
     {
         if(!string.IsNullOrEmpty(chars) && 50 < chars?.Length)
             yield return "Max 50 characters";
+    }
+
+    //Resets all fields
+    private void ResetFields()
+    {
+        _selectedUser = new UserUiDTO();
+        _selectedUserEdit = new UserUiDTO();
+        _displayedStationValues = "";
+        _selectedStationValues = new List<string>();
     }
 }

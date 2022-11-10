@@ -1,4 +1,5 @@
 ﻿@page "/Stations/StationEdit"
+@inject ISnackbar Snackbar
 @inject StationService stationService
 @inject AffiliateService affiliateService
 @inject BroadcastTypeService broadcastTypeService
@@ -228,7 +229,7 @@
     //Submit changes
     private void OnSubmitChanges()
     {
-        if(_selectedStation.Id != 0)
+        if (_selectedStation.Id != 0)
         {
             //Correlate affiliate selection with id for composite table
             var affiliateCompositeList = new List<int>();
@@ -315,8 +316,14 @@
             newList.Sort((element1, element2) => element1.Id.CompareTo(element2.Id));
             _stationList = newList;
 
+            Snackbar.Add($"'{_selectedStation.CallLetters}' sucessfully updated!");
+
             //Update selection
             _selectedStation = _selectedStationEdit;
+        }
+        else
+        {
+            Snackbar.Add("No Record Selected");
         }
     }
 
@@ -333,18 +340,14 @@
             newList.Remove(newList.First(station => station.Id == _selectedStation.Id));
             _stationList = newList;
 
+            Snackbar.Add($"'{_selectedStation.CallLetters}' sucessfully deleted!");
+
             //Reset fields
-            _selectedStation = new StationUiDTO();
-            _selectedStationEdit = new StationUiDTO();
-
-            _displayedAffiliateValues = "";
-            _selectedAffiliateValues = new List<string>();
-
-            _displayedBroadcastTypeValues = "";
-            _selectedBroadcastTypeValues = new List<string>();
-
-            _displayedMarketValues = "";
-            _selectedMarketValues = new List<string>();
+            ResetFields();
+        }
+        else
+        {
+            Snackbar.Add("No Record Selected");
         }
     }
 
@@ -363,9 +366,26 @@
         return false;
     }
 
+    //Fields character counter
     private IEnumerable<string> MaxCharacters(string chars)
     {
         if(!string.IsNullOrEmpty(chars) && 50 < chars?.Length)
             yield return "Max 50 characters";
+    }
+
+    //Resets all fields
+    private void ResetFields()
+    {
+        _selectedStation = new StationUiDTO();
+        _selectedStationEdit = new StationUiDTO();
+
+        _displayedAffiliateValues = "";
+        _selectedAffiliateValues = new List<string>();
+
+        _displayedBroadcastTypeValues = "";
+        _selectedBroadcastTypeValues = new List<string>();
+
+        _displayedMarketValues = "";
+        _selectedMarketValues = new List<string>();
     }
 }

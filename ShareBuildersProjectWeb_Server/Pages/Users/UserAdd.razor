@@ -1,4 +1,5 @@
 ﻿@page "/Users/UserAdd"
+@inject ISnackbar Snackbar
 @inject UserService userService
 @inject StationService stationService
 
@@ -77,31 +78,54 @@
     //Submit new user
     private void OnSubmitNewUser()
     {
-        //Correlate station selection with id for composite table
-        var stationCompositeList = new List<int>();
-        foreach(var selectedStation in _selectedStationValues)
+        //Check for null fields
+        bool isValid = true;
+        foreach(var prop in typeof(UserUiDTO).GetProperties())
         {
-            foreach(var station in _stationList)
+            if(prop.Name == "Id") { continue; }
+            if(prop.Name == "CreationDate") { continue; }
+            if(prop.Name == "StationsAssigned") { continue; }
+            if(prop.GetValue(_newUser) == null || string.IsNullOrEmpty(prop.GetValue(_newUser).ToString()))
             {
-                if (selectedStation == station.CallLetters)
-                {
-                    stationCompositeList.Add(station.Id);
-                    break;
-                }
+                isValid = false;
+                break;
             }
         }
 
-        int[] stationCompositeArray = stationCompositeList.ToArray();
-
-        var newUser = new UserAddUpdateDTO()
+        if(isValid == true)
+        {
+            //Correlate station selection with id for composite table
+            var stationCompositeList = new List<int>();
+            foreach (var selectedStation in _selectedStationValues)
             {
-                Id = _newUser.Id,
-                FirstName = _newUser.FirstName,
-                LastName = _newUser.LastName,
-                StationIds = stationCompositeArray
-            };
+                foreach (var station in _stationList)
+                {
+                    if (selectedStation == station.CallLetters)
+                    {
+                        stationCompositeList.Add(station.Id);
+                        break;
+                    }
+                }
+            }
 
-        userService.CreateUser(newUser);
+            int[] stationCompositeArray = stationCompositeList.ToArray();
+
+            var newUser = new UserAddUpdateDTO()
+                {
+                    Id = _newUser.Id,
+                    FirstName = _newUser.FirstName,
+                    LastName = _newUser.LastName,
+                    StationIds = stationCompositeArray
+                };
+
+            userService.CreateUser(newUser);
+
+            Snackbar.Add($"User account for '{_newUser.FirstName} {_newUser.LastName}' successfully created!");
+        }
+        else
+        {
+            Snackbar.Add($"Fields cannot be empty.");
+        }
     }
 
     private IEnumerable<string> MaxCharacters(string chars)

@@ -1,4 +1,5 @@
 ﻿@page "/Stations/StationAdd"
+@inject ISnackbar Snackbar
 @inject StationService stationService
 @inject AffiliateService affiliateService
 @inject BroadcastTypeService broadcastTypeService
@@ -136,65 +137,89 @@
     //Submit new station
     private void OnSubmitNewStation()
     {
-        //Correlate affiliate selection with id for composite table
-        var affiliateCompositeList = new List<int>();
-        foreach(var selectedAffiliate in _selectedAffiliateValues)
+        //Check for null fields
+        bool isValid = true;
+        foreach(var prop in typeof(StationUiDTO).GetProperties())
         {
-            foreach(var affiliate in _affiliateList)
+            if(prop.Name == "Id") { continue; }
+            if(prop.Name == "AffiliatesAssigned") { continue; }
+            if(prop.Name == "BroadcastTypesAssigned") { continue; }
+            if(prop.Name == "MarketsAssigned") { continue; }
+            if(prop.GetValue(_newStation) == null || string.IsNullOrEmpty(prop.GetValue(_newStation).ToString()))
             {
-                if(selectedAffiliate == affiliate.ShortName)
-                {
-                    affiliateCompositeList.Add((int)affiliate.Id);
-                    break;
-                }
+                isValid = false;
+                break;
             }
         }
 
-        //Correlate broadcastType selection with id for composite table
-        var broadcastTypeCompositeList = new List<int>();
-        foreach(var selectedBroadcastType in _selectedBroadcastTypeValues)
+        if(isValid == true)
         {
-            foreach(var broadcastType in _broadcastTypeList)
+            //Correlate affiliate selection with id for composite table
+            var affiliateCompositeList = new List<int>();
+            foreach(var selectedAffiliate in _selectedAffiliateValues)
             {
-                if(selectedBroadcastType == broadcastType.Name)
+                foreach(var affiliate in _affiliateList)
                 {
-                    broadcastTypeCompositeList.Add((int)broadcastType.Id);
-                    break;
+                    if(selectedAffiliate == affiliate.ShortName)
+                    {
+                        affiliateCompositeList.Add((int)affiliate.Id);
+                        break;
+                    }
                 }
             }
-        }
 
-        //Correlate affiliate selection with id for composite table
-        var marketCompositeList = new List<int>();
-        foreach(var selectedMarket in _selectedMarketValues)
-        {
-            foreach(var market in _marketsList)
+            //Correlate broadcastType selection with id for composite table
+            var broadcastTypeCompositeList = new List<int>();
+            foreach(var selectedBroadcastType in _selectedBroadcastTypeValues)
             {
-                if(selectedMarket == market.Name)
+                foreach(var broadcastType in _broadcastTypeList)
                 {
-                    marketCompositeList.Add((int)market.Id);
-                    break;
+                    if(selectedBroadcastType == broadcastType.Name)
+                    {
+                        broadcastTypeCompositeList.Add((int)broadcastType.Id);
+                        break;
+                    }
                 }
             }
-        }
 
-        //Convert selection lists to arrays
-        int[] affiliateCompositeArray = affiliateCompositeList.ToArray();
-        int[] broadcastTypeCompositeArray = broadcastTypeCompositeList.ToArray();
-        int[] marketCompositeArray = marketCompositeList.ToArray();
-
-        var newStation = new StationAddUpdateDTO()
+            //Correlate affiliate selection with id for composite table
+            var marketCompositeList = new List<int>();
+            foreach(var selectedMarket in _selectedMarketValues)
             {
-                CallLetters = _newStation.CallLetters,
-                Owner = _newStation.Owner,
-                Format = _newStation.Format,
-                AffiliateIds = affiliateCompositeArray,
-                BroadcastTypeIds = broadcastTypeCompositeArray,
-                MarketIds = marketCompositeArray
-            };
+                foreach(var market in _marketsList)
+                {
+                    if(selectedMarket == market.Name)
+                    {
+                        marketCompositeList.Add((int)market.Id);
+                        break;
+                    }
+                }
+            }
 
-        //Create new station
-        stationService.CreateStation(newStation);
+            //Convert selection lists to arrays
+            int[] affiliateCompositeArray = affiliateCompositeList.ToArray();
+            int[] broadcastTypeCompositeArray = broadcastTypeCompositeList.ToArray();
+            int[] marketCompositeArray = marketCompositeList.ToArray();
+
+            var newStation = new StationAddUpdateDTO()
+                {
+                    CallLetters = _newStation.CallLetters,
+                    Owner = _newStation.Owner,
+                    Format = _newStation.Format,
+                    AffiliateIds = affiliateCompositeArray,
+                    BroadcastTypeIds = broadcastTypeCompositeArray,
+                    MarketIds = marketCompositeArray
+                };
+
+            //Create new station
+            stationService.CreateStation(newStation);
+
+            Snackbar.Add($"'{newStation.CallLetters}' station successfully created!");
+        }
+        else
+        {
+            Snackbar.Add($"Fields cannot be empty.");
+        }
     }
 
     private IEnumerable<string> MaxCharacters(string chars)
