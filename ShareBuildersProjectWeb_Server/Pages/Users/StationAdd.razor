@@ -1,5 +1,4 @@
-﻿@page "/Station/StationAdd"
-@inject UserService userService
+﻿@page "/Stations/StationAdd"
 @inject StationService stationService
 @inject AffiliateService affiliateService
 @inject BroadcastTypeService broadcastTypeService
@@ -181,7 +180,7 @@
         int[] broadcastTypeCompositeArray = broadcastTypeCompositeList.ToArray();
         int[] marketCompositeArray = marketCompositeList.ToArray();
 
-        var newstation = new StationAddUpdateDTO()
+        var newStation = new StationAddUpdateDTO()
             {
                 CallLetters = _newStation.CallLetters,
                 Owner = _newStation.Owner,
@@ -192,7 +191,7 @@
             };
 
         //Create new station
-        stationService.CreateStation(newstation);
+        stationService.CreateStation(newStation);
     }
 
     private IEnumerable<string> MaxCharacters(string chars)

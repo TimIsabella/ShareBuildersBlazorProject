@@ -153,55 +153,56 @@
     //Submit changes
     private void OnSubmitChanges()
     {
-        //Correlate station selection with id for composite table
-        var stationCompositeList = new List<int>();
-        var newSelectedStationsList = new List<StationUiDTO>();
-        foreach(var selectedStation in _selectedStationValues)
+        if (_selectedUser.Id != 0)
         {
-            foreach(var station in _stationList)
+            //Correlate station selection with id for composite table
+            var stationCompositeList = new List<int>();
+            var newSelectedStationsList = new List<StationUiDTO>();
+            foreach (var selectedStation in _selectedStationValues)
             {
-                if (selectedStation == station.CallLetters)
+                foreach (var station in _stationList)
                 {
-                    stationCompositeList.Add(station.Id);
-                    newSelectedStationsList.Add(station);
-                    break;
+                    if (selectedStation == station.CallLetters)
+                    {
+                        stationCompositeList.Add(station.Id);
+                        newSelectedStationsList.Add(station);
+                        break;
+                    }
                 }
             }
+
+            //Convert selection list to array
+            int[] stationCompositeArray = stationCompositeList.ToArray();
+
+            var userForUpdate = new UserAddUpdateDTO()
+                {
+                    Id = _selectedUserEdit.Id,
+                    FirstName = _selectedUserEdit.FirstName,
+                    LastName = _selectedUserEdit.LastName,
+                    StationIds = stationCompositeArray
+                };
+
+            //Update user
+            userService.Update(userForUpdate);
+
+            //Update user list
+            var updatedUser = new UserUiDTO()
+                {
+                    Id = _selectedUserEdit.Id,
+                    FirstName = _selectedUserEdit.FirstName,
+                    LastName = _selectedUserEdit.LastName,
+                    StationsAssigned = newSelectedStationsList
+                };
+
+            List<UserUiDTO> newList = _userList.ToList();
+            newList.Remove(newList.First(user => user.Id == updatedUser.Id));
+            newList.Add(updatedUser);
+            newList.Sort((element1, element2) => element1.Id.CompareTo(element2.Id));
+            _userList = newList;
+
+            //Update selection
+            _selectedUser = _selectedUserEdit;
         }
-
-        //Convert selection list to array
-        int[] stationCompositeArray = stationCompositeList.ToArray();
-
-        var userForUpdate = new UserAddUpdateDTO()
-            {
-                Id = _selectedUserEdit.Id,
-                FirstName = _selectedUserEdit.FirstName,
-                LastName = _selectedUserEdit.LastName,
-                StationIds = stationCompositeArray
-            };
-
-        //Update user
-        userService.Update(userForUpdate);
-
-        //Update user list
-        var updatedUser = new UserUiDTO()
-            {
-                Id = _selectedUserEdit.Id,
-                FirstName = _selectedUserEdit.FirstName,
-                LastName = _selectedUserEdit.LastName,
-                StationsAssigned = newSelectedStationsList
-            };
-
-        List<UserUiDTO> newList = _userList.ToList();
-        newList.Remove(newList.First(user => user.Id == updatedUser.Id));
-        newList.Add(updatedUser);
-        newList.Sort((element1, element2) => element1.Id.CompareTo(element2.Id));
-        _userList = newList;
-
-        //Update selection
-        _selectedUser = _selectedUserEdit;
-
-        //StateHasChanged();
     }
 
     //Delete record

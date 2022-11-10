@@ -1,0 +1,368 @@
+﻿@page "/Stations/StationEdit"
+@inject StationService stationService
+@inject AffiliateService affiliateService
+@inject BroadcastTypeService broadcastTypeService
+@inject MarketService marketService
+
+<MudText Typo="Typo.h4">Station Edit</MudText>
+
+<br />
+
+<MudText Inline="true">Current Selection:  <b>@_selectedStation.CallLetters</b></MudText>
+
+<br /> <br />
+
+<MudButton OnClick="OnSubmitChanges" 
+    Variant="Variant.Filled" 
+    StartIcon="@Icons.Material.Filled.Send" 
+    Color="Color.Warning"
+    Size="Size.Small"
+    >Update
+</MudButton>
+
+<MudButton OnClick="OnDeleteButtonClick" 
+    Variant="Variant.Filled" 
+    StartIcon="@Icons.Material.Filled.Delete" 
+    Color="Color.Error"
+    Size="Size.Small"
+    >Delete
+</MudButton>
+
+<br /><br /><br />
+
+<MudTextField
+    Label="Call Letters" 
+    T="string"
+    @bind-Value="_selectedStationEdit.CallLetters"
+    Immediate="true" 
+    Counter="50" 
+    HelperText="Max 50 characters"
+    MaxLength="50"
+    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))"
+    Variant="Variant.Outlined">
+</MudTextField>
+
+<br />
+
+<MudTextField
+    Label="Owner"
+    T="string"
+    @bind-Value="_selectedStationEdit.Owner"
+    Immediate="true" 
+    Counter="50" 
+    HelperText="Max 50 characters"
+    MaxLength="50"
+    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))"
+    Variant="Variant.Outlined">
+</MudTextField>
+
+<br />
+
+<MudTextField
+    Label="Format"
+    T="string"
+    @bind-Value="_selectedStationEdit.Format"
+    Immediate="true" 
+    Counter="50" 
+    HelperText="Max 50 characters"
+    MaxLength="50"
+    Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))"
+    Variant="Variant.Outlined">
+</MudTextField>
+
+<br />
+
+<MudSelect 
+    T="string" 
+    Label="Affiliates" 
+    MultiSelection="true" 
+    @bind-Value="_displayedAffiliateValues" 
+    @bind-SelectedValues="_selectedAffiliateValues"
+    Variant="Variant.Outlined">
+
+    @foreach(var affiliate in _affiliateList)
+    {
+            <MudSelectItem T="string" Value="@affiliate.ShortName">@affiliate.ShortName</MudSelectItem>
+    }
+</MudSelect>
+
+<MudSelect 
+    T="string" 
+    Label="BroadcastType" 
+    MultiSelection="true" 
+    @bind-Value="_displayedBroadcastTypeValues" 
+    @bind-SelectedValues="_selectedBroadcastTypeValues"
+    Variant="Variant.Outlined">
+
+    @foreach(var broadcastType in _broadcastTypeList)
+    {
+            <MudSelectItem T="string" Value="@broadcastType.Name">@broadcastType.Name</MudSelectItem>
+    }
+</MudSelect>
+
+<MudSelect 
+    T="string" 
+    Label="Markets" 
+    MultiSelection="true" 
+    @bind-Value="_displayedMarketValues" 
+    @bind-SelectedValues="_selectedMarketValues"
+    Variant="Variant.Outlined">
+
+    @foreach(var market in _marketsList)
+    {
+            <MudSelectItem T="string" Value="@market.Name">@market.Name</MudSelectItem>
+    }
+</MudSelect>
+
+<br /><br />
+
+<MudText Typo="Typo.h6">Station Selection</MudText>
+<MudTable Items="@_stationList" 
+    Dense=true 
+    Hover=true 
+    Bordered=true
+    Striped=true
+    Filter="new Func<StationUiDTO, bool>(FilterFunc1)"
+    T="StationUiDTO"
+    SelectedItemChanged="OnSelectStation">
+
+    <ToolBarContent>
+
+        <MudTextField @bind-Value="_searchString" 
+            Placeholder="Search" 
+            Adornment="Adornment.Start" 
+            AdornmentIcon="@Icons.Material.Filled.Search" 
+            IconSize="Size.Medium" Class="mt-0">
+        </MudTextField>
+
+    </ToolBarContent>
+
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Call Letters</MudTh>
+        <MudTh>Owner</MudTh>
+        <MudTh>Format</MudTh>
+    </HeaderContent>
+
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Call Letters">@context.CallLetters</MudTd>
+        <MudTd DataLabel="Owner">@context.Owner</MudTd>
+        <MudTd DataLabel="Format">@context.Format</MudTd>
+    </RowTemplate>
+
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+
+</MudTable>
+
+@code {
+    private string _searchString = "";
+    private StationUiDTO _selectedStation = new StationUiDTO();
+    private StationUiDTO _selectedStationEdit = new StationUiDTO();
+    private IEnumerable<StationUiDTO> _stationList = new List<StationUiDTO>();
+
+    private string _displayedAffiliateValues = "";
+    private IEnumerable<string> _selectedAffiliateValues = new List<string>();
+    private IEnumerable<Affiliate> _affiliateList = new List<Affiliate>();
+
+    private string _displayedBroadcastTypeValues = "";
+    private IEnumerable<string> _selectedBroadcastTypeValues = new List<string>();
+    private IEnumerable<BroadcastType> _broadcastTypeList = new List<BroadcastType>();
+
+    private string _displayedMarketValues = "";
+    private IEnumerable<string> _selectedMarketValues = new List<string>();
+    private IEnumerable<Market> _marketsList = new List<Market>();
+
+    //Get all users and stations
+    protected override async Task OnInitializedAsync()
+    {
+        var stationData = stationService.GetAllStations();
+        _stationList = stationData.ToList();
+
+        var affiliateData = affiliateService.GetAllAffiliates();
+        _affiliateList = affiliateData.ToList();
+
+        var broadcastTypeData = broadcastTypeService.GetAllBroadcastTypes();
+        _broadcastTypeList = broadcastTypeData.ToList();
+
+        var marketData = marketService.GetAllMarkets();
+        _marketsList = marketData.ToList();
+    }
+
+    //User select
+    private void OnSelectStation(StationUiDTO element)
+    {
+        _selectedStation = element;
+        _selectedStationEdit = new StationUiDTO() 
+        { 
+            Id = element.Id,
+            CallLetters = element.CallLetters,
+            Owner = element.Owner,
+            Format = element.Format,
+            AffiliatesAssigned = element.AffiliatesAssigned,
+            BroadcastTypesAssigned = element.BroadcastTypesAssigned,
+            MarketsAssigned = element.MarketsAssigned
+        };
+
+        var stringList = new List<string>();
+        foreach(var station in element.AffiliatesAssigned)
+        { stringList.Add(station.ShortName); }
+        _selectedAffiliateValues = stringList;
+
+        stringList = new List<string>();
+        foreach(var station in element.BroadcastTypesAssigned)
+        { stringList.Add(station.Name); }
+        _selectedBroadcastTypeValues = stringList;
+
+        stringList = new List<string>();
+        foreach(var station in element.MarketsAssigned)
+        { stringList.Add(station.Name); }
+        _selectedMarketValues = stringList;
+    }
+
+    //Submit changes
+    private void OnSubmitChanges()
+    {
+        if(_selectedStation.Id != 0)
+        {
+            //Correlate affiliate selection with id for composite table
+            var affiliateCompositeList = new List<int>();
+            var newSelectedAffiliatesList = new List<Affiliate>();
+            foreach (var selectedAffiliate in _selectedAffiliateValues)
+            {
+                foreach (var affiliate in _affiliateList)
+                {
+                    if (selectedAffiliate == affiliate.ShortName)
+                    {
+                        affiliateCompositeList.Add((int)affiliate.Id);
+                        newSelectedAffiliatesList.Add(affiliate);
+                        break;
+                    }
+                }
+            }
+
+            //Correlate broadcastType selection with id for composite table
+            var broadcastTypeCompositeList = new List<int>();
+            var newSelectedBroadcastTypesList = new List<BroadcastType>();
+            foreach (var selectedBroadcastType in _selectedBroadcastTypeValues)
+            {
+                foreach (var broadcastType in _broadcastTypeList)
+                {
+                    if (selectedBroadcastType == broadcastType.Name)
+                    {
+                        broadcastTypeCompositeList.Add((int)broadcastType.Id);
+                        newSelectedBroadcastTypesList.Add(broadcastType);
+                        break;
+                    }
+                }
+            }
+
+            //Correlate affiliate selection with id for composite table
+            var marketCompositeList = new List<int>();
+            var newSelectedMarketsList = new List<Market>();
+            foreach (var selectedMarket in _selectedMarketValues)
+            {
+                foreach (var market in _marketsList)
+                {
+                    if (selectedMarket == market.Name)
+                    {
+                        marketCompositeList.Add((int)market.Id);
+                        newSelectedMarketsList.Add(market);
+                        break;
+                    }
+                }
+            }
+
+            //Convert selection lists to arrays
+            int[] affiliateCompositeArray = affiliateCompositeList.ToArray();
+            int[] broadcastTypeCompositeArray = broadcastTypeCompositeList.ToArray();
+            int[] marketCompositeArray = marketCompositeList.ToArray();
+
+            var stationForUpdate = new StationAddUpdateDTO()
+                {
+                    Id = _selectedStationEdit.Id,
+                    CallLetters = _selectedStationEdit.CallLetters,
+                    Owner = _selectedStationEdit.Owner,
+                    Format = _selectedStationEdit.Format,
+                    AffiliateIds = affiliateCompositeArray,
+                    BroadcastTypeIds = broadcastTypeCompositeArray,
+                    MarketIds = marketCompositeArray
+                };
+
+            //Update station
+            stationService.Update(stationForUpdate);
+
+            //Update user list
+            var updatedStation = new StationUiDTO()
+                {
+                    Id = _selectedStationEdit.Id,
+                    CallLetters = _selectedStationEdit.CallLetters,
+                    Owner = _selectedStationEdit.Owner,
+                    Format = _selectedStationEdit.Format,
+                    AffiliatesAssigned = newSelectedAffiliatesList,
+                    BroadcastTypesAssigned = newSelectedBroadcastTypesList,
+                    MarketsAssigned = newSelectedMarketsList
+                };
+
+            List<StationUiDTO> newList = _stationList.ToList();
+            newList.Remove(newList.First(station => station.Id == updatedStation.Id));
+            newList.Add(updatedStation);
+            newList.Sort((element1, element2) => element1.Id.CompareTo(element2.Id));
+            _stationList = newList;
+
+            //Update selection
+            _selectedStation = _selectedStationEdit;
+        }
+    }
+
+    //Delete record
+    private void OnDeleteButtonClick()
+    {
+        if(_selectedStation.Id != 0)
+        {
+            //Delete station
+            stationService.Delete(_selectedStation.Id);
+
+            //Update station list
+            List<StationUiDTO> newList = _stationList.ToList();
+            newList.Remove(newList.First(station => station.Id == _selectedStation.Id));
+            _stationList = newList;
+
+            //Reset fields
+            _selectedStation = new StationUiDTO();
+            _selectedStationEdit = new StationUiDTO();
+
+            _displayedAffiliateValues = "";
+            _selectedAffiliateValues = new List<string>();
+
+            _displayedBroadcastTypeValues = "";
+            _selectedBroadcastTypeValues = new List<string>();
+
+            _displayedMarketValues = "";
+            _selectedMarketValues = new List<string>();
+        }
+    }
+
+    //Search filter
+    private bool FilterFunc1(StationUiDTO element) => FilterFunc(element, _searchString);
+    private bool FilterFunc(StationUiDTO element, string searchString)
+    {
+        if(string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if(element.CallLetters.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if(element.Owner.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if(element.Format.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+    private IEnumerable<string> MaxCharacters(string chars)
+    {
+        if(!string.IsNullOrEmpty(chars) && 50 < chars?.Length)
+            yield return "Max 50 characters";
+    }
+}
