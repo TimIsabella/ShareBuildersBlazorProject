@@ -12,7 +12,7 @@ using ShareBuildersProject_DataAccess.Data;
 namespace ShareBuildersProject_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221106160648_initial")]
+    [Migration("20221112022904_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -412,21 +412,21 @@ namespace ShareBuildersProject_DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreationDate = new DateTime(2022, 11, 6, 8, 6, 48, 104, DateTimeKind.Local).AddTicks(1969),
+                            CreationDate = new DateTime(2022, 11, 11, 18, 29, 3, 684, DateTimeKind.Local).AddTicks(3673),
                             FirstName = "Mike",
                             LastName = "Jones"
                         },
                         new
                         {
                             Id = 2,
-                            CreationDate = new DateTime(2022, 11, 6, 8, 6, 48, 106, DateTimeKind.Local).AddTicks(7984),
+                            CreationDate = new DateTime(2022, 11, 11, 18, 29, 3, 687, DateTimeKind.Local).AddTicks(1110),
                             FirstName = "Bob",
                             LastName = "Smith"
                         },
                         new
                         {
                             Id = 3,
-                            CreationDate = new DateTime(2022, 11, 6, 8, 6, 48, 106, DateTimeKind.Local).AddTicks(8008),
+                            CreationDate = new DateTime(2022, 11, 11, 18, 29, 3, 687, DateTimeKind.Local).AddTicks(1135),
                             FirstName = "Sarah",
                             LastName = "Parker"
                         });
