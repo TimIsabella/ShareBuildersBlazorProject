@@ -158,60 +158,77 @@
     {
         if (_selectedUser.Id != 0)
         {
-            //Correlate station selection with id for composite table
-            var stationCompositeList = new List<int>();
-            var newSelectedStationsList = new List<StationUiDTO>();
-            foreach (var selectedStation in _selectedStationValues)
+            //Check for null fields
+            bool isValid = true;
+            foreach(var prop in typeof(UserUiDTO).GetProperties())
             {
-                foreach (var station in _stationList)
+                if(prop.Name == "Id") { continue; }
+                if(prop.Name == "CreationDate") { continue; }
+                if(prop.Name == "StationsAssigned") { continue; }
+                if(prop.GetValue(_selectedUserEdit) == null || string.IsNullOrEmpty(prop.GetValue(_selectedUserEdit).ToString()))
                 {
-                    if (selectedStation == station.CallLetters)
-                    {
-                        stationCompositeList.Add(station.Id);
-                        newSelectedStationsList.Add(station);
-                        break;
-                    }
+                    isValid = false;
+                    break;
                 }
             }
 
-            //Convert selection list to array
-            int[] stationCompositeArray = stationCompositeList.ToArray();
-
-            var userForUpdate = new UserAddUpdateDTO()
+            if (isValid == true)
+            {
+                //Correlate station selection with id for composite table
+                var stationCompositeList = new List<int>();
+                var newSelectedStationsList = new List<StationUiDTO>();
+                foreach (var selectedStation in _selectedStationValues)
                 {
-                    Id = _selectedUserEdit.Id,
-                    FirstName = _selectedUserEdit.FirstName,
-                    LastName = _selectedUserEdit.LastName,
-                    StationIds = stationCompositeArray
-                };
+                    foreach (var station in _stationList)
+                    {
+                        if (selectedStation == station.CallLetters)
+                        {
+                            stationCompositeList.Add(station.Id);
+                            newSelectedStationsList.Add(station);
+                            break;
+                        }
+                    }
+                }
 
-            //Update user
-            userService.Update(userForUpdate);
+                //Convert selection list to array
+                int[] stationCompositeArray = stationCompositeList.ToArray();
 
-            //Update user list
-            var updatedUser = new UserUiDTO()
-                {
-                    Id = _selectedUserEdit.Id,
-                    FirstName = _selectedUserEdit.FirstName,
-                    LastName = _selectedUserEdit.LastName,
-                    StationsAssigned = newSelectedStationsList
-                };
+                var userForUpdate = new UserAddUpdateDTO()
+                    {
+                        Id = _selectedUserEdit.Id,
+                        FirstName = _selectedUserEdit.FirstName,
+                        LastName = _selectedUserEdit.LastName,
+                        StationIds = stationCompositeArray
+                    };
 
-            List<UserUiDTO> newList = _userList.ToList();
-            newList.Remove(newList.First(user => user.Id == updatedUser.Id));
-            newList.Add(updatedUser);
-            newList.Sort((element1, element2) => element1.Id.CompareTo(element2.Id));
-            _userList = newList;
+                //Update user
+                userService.Update(userForUpdate);
 
-            Snackbar.Add($"'{_selectedUser.FirstName} {_selectedUser.LastName}' sucessfully updated!");
+                //Update user list
+                var updatedUser = new UserUiDTO()
+                    {
+                        Id = _selectedUserEdit.Id,
+                        FirstName = _selectedUserEdit.FirstName,
+                        LastName = _selectedUserEdit.LastName,
+                        StationsAssigned = newSelectedStationsList
+                    };
 
-            //Update selection
-            _selectedUser = _selectedUserEdit;
+                List<UserUiDTO> newList = _userList.ToList();
+                newList.Remove(newList.First(user => user.Id == updatedUser.Id));
+                newList.Add(updatedUser);
+                newList.Sort((element1, element2) => element1.Id.CompareTo(element2.Id));
+                _userList = newList;
+
+                Snackbar.Add($"'{_selectedUser.FirstName} {_selectedUser.LastName}' sucessfully updated!");
+
+                //Update selection
+                _selectedUser = _selectedUserEdit;
+            }
+            else
+            { Snackbar.Add($"Fields cannot be empty."); }
         }
         else
-        {
-            Snackbar.Add("No Record Selected");
-        }
+        { Snackbar.Add("No Record Selected"); }
     }
 
     //Delete record
