@@ -10,7 +10,9 @@ namespace ShareBuildersProjectWeb_Api.Services
 		private readonly IUserCompositeRepository _userCompositeRepository;
 		private readonly IStationRepository _stationRepository;
 
-		public UserService(IUserRepository userRepository, IUserCompositeRepository userCompositeRepository, IStationRepository stationRepository)
+		public UserService(IUserRepository userRepository, 
+						   IUserCompositeRepository userCompositeRepository, 
+						   IStationRepository stationRepository)
 		{
 			_userRepository = userRepository;
 			_userCompositeRepository = userCompositeRepository;
@@ -65,7 +67,7 @@ namespace ShareBuildersProjectWeb_Api.Services
 													 Format = station.Format
 												 }).ToList(),
 
-							 CreationDate = (DateTime) user.CreationDate
+							 CreationDate = (DateTime)user.CreationDate
 						 };
 
 			return result;

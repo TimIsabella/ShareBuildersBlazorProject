@@ -37,10 +37,9 @@ namespace ShareBuildersProject_Business.Repository
 			var market = _dbContext.Markets.Find(id);
 
 			if(market != null)
-			{
-				return market;
-			}
-			else return new Market();
+			{ return market; }
+			else
+			{ return new Market(); }
 		}
 
 		public Market Update(Market obj)
@@ -57,7 +56,8 @@ namespace ShareBuildersProject_Business.Repository
 
 				return market;
 			}
-			else return obj;
+			else
+			{ return obj; }
 		}
 
 		public int Delete(int id)
@@ -69,7 +69,8 @@ namespace ShareBuildersProject_Business.Repository
 				_dbContext.Markets.Remove(market);
 				return _dbContext.SaveChanges();
 			}
-			else return 0;
+			else
+			{ return 0; }
 		}
 	}
 }

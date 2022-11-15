@@ -35,10 +35,9 @@ namespace ShareBuildersProject_Business.Repository
 			var broadcastType = _dbContext.BroadcastTypes.Find(id);
 
 			if(broadcastType != null)
-			{
-				return broadcastType;
-			}
-			else return new BroadcastType();
+			{ return broadcastType; }
+			else
+			{ return new BroadcastType(); }
 		}
 
 		public BroadcastType Update(BroadcastType obj)
@@ -54,7 +53,8 @@ namespace ShareBuildersProject_Business.Repository
 
 				return broadcastType;
 			}
-			else return obj;
+			else
+			{ return obj; }
 		}
 
 		public int Delete(int id)
@@ -66,7 +66,8 @@ namespace ShareBuildersProject_Business.Repository
 				_dbContext.BroadcastTypes.Remove(broadcastType);
 				return _dbContext.SaveChanges();
 			}
-			else return 0;
+			else
+			{ return 0; }
 		}
 	}
 }

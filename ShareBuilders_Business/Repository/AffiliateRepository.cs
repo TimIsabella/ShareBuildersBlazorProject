@@ -38,10 +38,9 @@ namespace ShareBuildersProject_Business.Repository
 			var affiliate = _dbContext.Affiliates.Find(id);
 
 			if(affiliate != null)
-			{
-				return affiliate;
-			}
-			else return new Affiliate();
+			{ return affiliate; }
+			else
+			{ return new Affiliate(); }
 		}
 
 		public Affiliate Update(Affiliate obj)
@@ -60,7 +59,8 @@ namespace ShareBuildersProject_Business.Repository
 
 				return affiliate;
 			}
-			else return obj;
+			else
+			{ return obj; }
 		}
 
 		public int Delete(int id)
@@ -72,7 +72,8 @@ namespace ShareBuildersProject_Business.Repository
 				_dbContext.Affiliates.Remove(affiliate);
 				return _dbContext.SaveChanges();
 			}
-			else return 0;
+			else
+			{ return 0; }
 		}
 	}
 }

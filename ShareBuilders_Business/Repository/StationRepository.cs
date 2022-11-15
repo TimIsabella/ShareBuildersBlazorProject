@@ -37,10 +37,9 @@ namespace ShareBuildersProject_Business.Repository
 			var station = _dbContext.Stations.Find(id);
 
 			if(station != null)
-			{
-				return station;
-			}
-			else return new Station();
+			{ return station; }
+			else
+			{ return new Station(); }
 		}
 
 		public Station Update(Station obj)
@@ -58,7 +57,8 @@ namespace ShareBuildersProject_Business.Repository
 
 				return station;
 			}
-			else return obj;
+			else
+			{ return obj; }
 		}
 
 		public int Delete(int id)
@@ -70,7 +70,8 @@ namespace ShareBuildersProject_Business.Repository
 				_dbContext.Stations.Remove(station);
 				return _dbContext.SaveChanges();
 			}
-			else return 0;
+			else
+			{ return 0; }
 		}
 	}
 }

@@ -11,28 +11,18 @@ namespace ShareBuildersProjectWeb_Api.Services
 		{ _affiliateRepository = affiliateRepository; }
 
 		public Affiliate CreateAffiliate(Affiliate affiliateData)
-		{
-			return _affiliateRepository.Create(affiliateData);
-		}
+		{ return _affiliateRepository.Create(affiliateData); }
 
 		public IEnumerable<Affiliate> GetAllAffiliates()
-		{
-			return _affiliateRepository.GetAll();
-		}
+		{ return _affiliateRepository.GetAll(); }
 
 		public Affiliate GetAffiliateById(int id)
-		{
-			return _affiliateRepository.GetById(id);
-		}
+		{ return _affiliateRepository.GetById(id); }
 
 		public Affiliate Update(Affiliate affiliateData)
-		{
-			return _affiliateRepository.Update(affiliateData);
-		}
+		{ return _affiliateRepository.Update(affiliateData); }
 
 		public int Delete(int id)
-		{
-			return _affiliateRepository.Delete(id);
-		}
+		{ return _affiliateRepository.Delete(id); }
 	}
 }

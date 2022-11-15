@@ -37,10 +37,9 @@ namespace ShareBuildersProject_Business.Repository
 			var user = _dbContext.Users.Find(id);
 
 			if(user != null)
-			{
-				return user;
-			}
-			else return new User();
+			{ return user; }
+			else
+			{ return new User(); }
 		}
 
 		public User Update(User obj)
@@ -57,7 +56,8 @@ namespace ShareBuildersProject_Business.Repository
 
 				return user;
 			}
-			else return obj;
+			else
+			{ return obj; }
 		}
 
 		public int Delete(int id)
@@ -69,7 +69,8 @@ namespace ShareBuildersProject_Business.Repository
 				_dbContext.Users.Remove(user);
 				return _dbContext.SaveChanges();
 			}
-			else return 0;
+			else
+			{ return 0; }
 		}
 	}
 }
